@@ -3,7 +3,6 @@ import NumebrtType from './enums/numberType'
 import TextEncoding from './enums/textEncoding'
 
 module Decoration {
-
     export function bitOrder(value : BitOrder) {
         return function (target : any, propertyKey : string) : void {
             addMeta(target, propertyKey, "bitOrder", value);

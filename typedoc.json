@@ -1,0 +1,16 @@
+{
+    "name": "byte-serializer",
+    "mode": "modules",
+    "theme": "default",
+    "ignoreCompilerErrors": true,
+    "includeDeclarations": false,
+    "hideGenerator": true,
+    "module": "commonjs",
+    "target": "ES5",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "suppressExcessPropertyErrors": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "out": "doc",
+    "excludePrivate": true
+}
