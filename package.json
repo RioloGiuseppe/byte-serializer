@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/RioloGiuseppe/byte-serializer/issues"
   },
-  "homepage": "https://github.com/RioloGiuseppe/byte-serializer#readme"
+  "homepage": "https://github.com/RioloGiuseppe/byte-serializer#readme",
+  "devDependencies": {
+    "@types/node": "^8.0.31"
+  }
 }

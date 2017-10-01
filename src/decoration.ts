@@ -1,39 +1,38 @@
 import BitOrder from './enums/bitOrder'
-import 'reflect-metadata'
-
+import NumebrtType from './enums/numberType'
 module Decoration {
 
     export function bitOrder(value : BitOrder) {
         return function (target : any, propertyKey : string) : void {
-            if (target && !target["_metaSerialize"]) {
-                target["_metaSerialize"] = {};
-            }
-            if (!target["_metaSerialize"][propertyKey]) 
-                target["_metaSerialize"][propertyKey] = {};
-            target["_metaSerialize"][propertyKey]["bitOrder"] = value;
+            addMeta(target, propertyKey, "bitOrder", value);
         }
     }
 
     export function lenght(value : number) {
         return function (target : any, propertyKey : string) : void {
-            if (target && !target["_metaSerialize"]) {
-                target["_metaSerialize"] = {};
-            }
-            if (!target["_metaSerialize"][propertyKey]) 
-                target["_metaSerialize"][propertyKey] = {};
-            target["_metaSerialize"][propertyKey]["lenght"] = value;
+            addMeta(target, propertyKey, "length", value);
         }
     }
 
     export function position(value : number) {
         return function (target : any, propertyKey : string) : any {
-            if (target && !target["_metaSerialize"]) {
-                target["_metaSerialize"] = {};
-            }
-            if (!target["_metaSerialize"][propertyKey]) 
-                target["_metaSerialize"][propertyKey] = {};
-            target["_metaSerialize"][propertyKey]["position"] = value;
+            addMeta(target, propertyKey, "position", value);
         }
+    }
+
+    export function numberType(value : NumebrtType) {
+        return function (target : any, propertyKey : string) : any {
+            addMeta(target, propertyKey, "numberType", value);
+        }
+    }
+
+    function addMeta(target : any, propertyKey : string, metaName : string, metaValue : any) {
+        if (target && !target["_metaSerialize"]) {
+            target["_metaSerialize"] = {};
+        }
+        if (!target["_metaSerialize"][propertyKey]) 
+            target["_metaSerialize"][propertyKey] = {};
+        target["_metaSerialize"][propertyKey][metaName] = metaValue;
     }
 }
 

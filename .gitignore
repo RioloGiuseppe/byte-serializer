@@ -70,3 +70,4 @@ typings/
 !.vscode/extensions.json
 .history
 build/**/*
+package-lock.json
