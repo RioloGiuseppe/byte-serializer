@@ -2,7 +2,7 @@ import BitOrder from './../enums/bitOrder'
 import NumebrtType from './../enums/numberType'
 import TextEncoding from './../enums/textEncoding'
 
-module Decoration {
+module SerializerInfo {
     export function bitOrder(value : BitOrder) {
         return function (target : any, propertyKey : string) : void {
             addMeta(target, propertyKey, "bitOrder", value);
@@ -43,4 +43,4 @@ module Decoration {
     }
 }
 
-export default Decoration
+export default SerializerInfo

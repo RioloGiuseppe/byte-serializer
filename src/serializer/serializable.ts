@@ -1,4 +1,4 @@
-import Decoration from './decoration'
+import SerializerInfo from './serializerInfo'
 import BitOrder from './../enums/bitOrder'
 import NumberType from './../enums/numberType'
 import CommomMetadata from './../interfaces/commonMetadata'
