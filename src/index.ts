@@ -1,10 +1,9 @@
-import A from './serializer'
+import A from './samples/DataExample'
 let a = new A();
 
-a.Plutp = "vvrbe";
+a.Pippo = 50;
+a.Pluto = 2000;
+a.Text = "una stringa";
+let arr = a.serialize()
 
-
-
-if(true){
-    console.log()
-}
+console.log(arr)

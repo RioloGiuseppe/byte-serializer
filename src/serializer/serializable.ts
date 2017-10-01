@@ -1,9 +1,9 @@
 import Decoration from './decoration'
-import BitOrder from './enums/bitOrder'
-import NumberType from './enums/numberType'
-import CommomMetadata from './interfaces/commonMetadata'
-import NumberMetadata from './interfaces/numberMetadata'
-import StringMetadata from './interfaces/stringMetadata'
+import BitOrder from './../enums/bitOrder'
+import NumberType from './../enums/numberType'
+import CommomMetadata from './../interfaces/commonMetadata'
+import NumberMetadata from './../interfaces/numberMetadata'
+import StringMetadata from './../interfaces/stringMetadata'
 import {} from 'node'
 
 abstract class Serializable {

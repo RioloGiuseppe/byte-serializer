@@ -1,6 +1,6 @@
-import BitOrder from './enums/bitOrder'
-import NumebrtType from './enums/numberType'
-import TextEncoding from './enums/textEncoding'
+import BitOrder from './../enums/bitOrder'
+import NumebrtType from './../enums/numberType'
+import TextEncoding from './../enums/textEncoding'
 
 module Decoration {
     export function bitOrder(value : BitOrder) {
