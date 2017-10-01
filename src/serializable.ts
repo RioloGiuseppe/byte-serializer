@@ -1,16 +1,13 @@
 import Decoration from './decoration'
 import BitOrder from './enums/bitOrder'
 import NumberType from './enums/numberType'
+import CommomMetadata from './interfaces/commonMetadata'
+import NumberMetadata from './interfaces/numberMetadata'
+import StringMetadata from './interfaces/stringMetadata'
 import {} from 'node'
 
 abstract class Serializable {
-    private get serializeMetadata() : {
-        name: string,
-        position: number,
-        length: number,
-        bitOrder: BitOrder,
-        numberType: NumberType
-    }[]{
+    private get serializeMetadata():CommomMetadata []{
         let _meta = Object
             .getPrototypeOf(this)
             ._metaSerialize;
@@ -27,12 +24,12 @@ abstract class Serializable {
         let last = metas[metas.length - 1]
         let buffer : Buffer = Buffer.allocUnsafe(last.position + last.length);
         for (let meta of metas) {
-            if (typeof(<any>this)[meta.name] === "number") {
-                if (meta.bitOrder===null||meta.bitOrder === undefined) {
-                    meta.bitOrder = BitOrder.BE;
+            if (typeof(<any>this)[meta.name] === "number") {             
+                if ((<NumberMetadata>meta).bitOrder===null||(<NumberMetadata>meta).bitOrder === undefined) {
+                    (<NumberMetadata>meta).bitOrder = BitOrder.BE;
                 }
                 if(BitOrder.BE) {
-                    switch (meta.numberType) {
+                    switch ((<NumberMetadata>meta).numberType) {
                         case NumberType.Int8:buffer.writeInt8((<any>this)[meta.name],meta.position);break;
                         case NumberType.UInt8:buffer.writeUInt8((<any>this)[meta.name],meta.position);break;
                         case NumberType.Int16:buffer.writeInt16BE((<any>this)[meta.name],meta.position);break;
@@ -44,7 +41,7 @@ abstract class Serializable {
                         default: throw "Unknown number type.";
                     }
                 } else {
-                    switch (meta.numberType) {
+                    switch ((<NumberMetadata>meta).numberType) {
                         case NumberType.Int8:buffer.writeInt8((<any>this)[meta.name],meta.position);break;
                         case NumberType.UInt8:buffer.writeUInt8((<any>this)[meta.name],meta.position);break;
                         case NumberType.Int16:buffer.writeInt16LE((<any>this)[meta.name],meta.position);break;
@@ -57,7 +54,9 @@ abstract class Serializable {
                     }
                 }
             }
-            if (typeof(<any>this)[meta.name]) {}
+            if (typeof(<any>this)[meta.name]==="string") {
+                buffer.write((<any>this)[meta.name], meta.position, meta.length, (<StringMetadata>meta).textEncoding);
+            }
         }
     return buffer;
     }
