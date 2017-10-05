@@ -28,7 +28,7 @@ abstract class Serializable {
                 if ((<NumberMetadata>meta).bitOrder===null||(<NumberMetadata>meta).bitOrder === undefined) {
                     (<NumberMetadata>meta).bitOrder = BitOrder.BE;
                 }
-                if(BitOrder.BE) {
+                if((<NumberMetadata>meta).bitOrder === BitOrder.BE) {
                     switch ((<NumberMetadata>meta).numberType) {
                         case NumberType.Int8:buffer.writeInt8((<any>this)[meta.name],meta.position);break;
                         case NumberType.UInt8:buffer.writeUInt8((<any>this)[meta.name],meta.position);break;
@@ -37,8 +37,7 @@ abstract class Serializable {
                         case NumberType.Int32:buffer.writeInt32BE((<any>this)[meta.name],meta.position);break;
                         case NumberType.UInt32:buffer.writeUInt32BE((<any>this)[meta.name],meta.position);break;
                         case NumberType.Float:buffer.writeFloatBE((<any>this)[meta.name],meta.position);break;
-                        case NumberType.Double:buffer.writeDoubleBE((<any>this)[meta.name],meta.position);break;
-                        default: throw "Unknown number type.";
+                        case NumberType.Double:buffer.writeDoubleBE((<any>this)[meta.name],meta.position);break;                        default: throw "Unknown number type.";
                     }
                 } else {
                     switch ((<NumberMetadata>meta).numberType) {
@@ -58,7 +57,43 @@ abstract class Serializable {
                 buffer.write((<any>this)[meta.name], meta.position, meta.length, (<StringMetadata>meta).textEncoding);
             }
         }
-    return buffer;
+        return buffer;
+    }
+
+    public deserialize(buffer: Buffer){
+        let metas = this.serializeMetadata;
+        for(let meta of metas){
+            if (typeof((<NumberMetadata>meta).numberType)!=="undefined") {           
+                if((<NumberMetadata>meta).bitOrder === BitOrder.BE) {
+                    switch ((<NumberMetadata>meta).numberType) {
+                        case NumberType.Int8:(<any>this)[meta.name] = buffer.readInt8(meta.position);break;
+                        case NumberType.UInt8:(<any>this)[meta.name] = buffer.readUInt8(meta.position);break;
+                        case NumberType.Int16:(<any>this)[meta.name] = buffer.readInt16BE(meta.position);break;
+                        case NumberType.UInt16:(<any>this)[meta.name] = buffer.readUInt16BE(meta.position);break;
+                        case NumberType.Int32:(<any>this)[meta.name] = buffer.readInt32BE(meta.position);break;
+                        case NumberType.UInt32:(<any>this)[meta.name] = buffer.readUInt32BE(meta.position);break;
+                        case NumberType.Float:(<any>this)[meta.name] = buffer.readFloatBE(meta.position);break;
+                        case NumberType.Double:(<any>this)[meta.name] = buffer.readDoubleBE(meta.position);break;
+                        default: throw "Unknown number type.";
+                    }
+                } else {
+                    switch ((<NumberMetadata>meta).numberType) {
+                        case NumberType.Int8:(<any>this)[meta.name] = buffer.readInt8(meta.position);break;
+                        case NumberType.UInt8:(<any>this)[meta.name] = buffer.readUInt8(meta.position);break;
+                        case NumberType.Int16:(<any>this)[meta.name] = buffer.readInt16LE(meta.position);break;
+                        case NumberType.UInt16:(<any>this)[meta.name] = buffer.readUInt16LE(meta.position);break;
+                        case NumberType.Int32:(<any>this)[meta.name] = buffer.readInt32LE(meta.position);break;
+                        case NumberType.UInt32:(<any>this)[meta.name] = buffer.readUInt32LE(meta.position);break;
+                        case NumberType.Float:(<any>this)[meta.name] = buffer.readFloatLE(meta.position);break;
+                        case NumberType.Double:(<any>this)[meta.name] = buffer.readDoubleLE(meta.position);break;
+                        default: throw "Unknown number type.";
+                    }
+                }
+            }
+            if (typeof((<StringMetadata>meta).textEncoding)!=="undefined") {
+                (<any>this)[meta.name] = buffer.toString((<StringMetadata>meta).textEncoding, meta.position,  meta.position + meta.length);
+            }
+        }
     }
 }
 export default Serializable
