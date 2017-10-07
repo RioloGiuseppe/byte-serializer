@@ -1,8 +1,8 @@
-import BitOrder from './../enums/bitOrder'
-import NumebrtType from './../enums/numberType'
-import TextEncoding from './../enums/textEncoding'
+import {BitOrder} from './../enums/bitOrder'
+import {NumberType} from './../enums/numberType'
+import {TextEncoding} from './../enums/textEncoding'
 
-module SerializerInfo {
+export module SerializerInfo {
     export function bitOrder(value : BitOrder) {
         return function (target : any, propertyKey : string) : void {
             addMeta(target, propertyKey, "bitOrder", value);
@@ -21,7 +21,7 @@ module SerializerInfo {
         }
     }
 
-    export function numberType(value : NumebrtType) {
+    export function numberType(value : NumberType) {
         return function (target : any, propertyKey : string) : any {
             addMeta(target, propertyKey, "numberType", value);
         }
@@ -32,7 +32,10 @@ module SerializerInfo {
             addMeta(target, propertyKey, "textEncoding", value);
         }
     }
-
+    
+    /**
+     * @ignore
+     */
     function addMeta(target : any, propertyKey : string, metaName : string, metaValue : any) {
         if (target && !target["_metaSerialize"]) {
             target["_metaSerialize"] = {};
@@ -42,5 +45,3 @@ module SerializerInfo {
         target["_metaSerialize"][propertyKey][metaName] = metaValue;
     }
 }
-
-export default SerializerInfo

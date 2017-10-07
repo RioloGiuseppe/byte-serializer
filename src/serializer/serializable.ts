@@ -1,13 +1,14 @@
-import SerializerInfo from './serializerInfo'
-import BitOrder from './../enums/bitOrder'
-import NumberType from './../enums/numberType'
-import CommomMetadata from './../interfaces/commonMetadata'
-import NumberMetadata from './../interfaces/numberMetadata'
-import StringMetadata from './../interfaces/stringMetadata'
+import {SerializerInfo} from './serializerInfo'
+import {BitOrder} from './../enums/bitOrder'
+import {NumberType} from './../enums/numberType'
+import {CommonMetadata} from './../interfaces/commonMetadata'
+import {NumberMetadata} from './../interfaces/numberMetadata'
+import {StringMetadata} from './../interfaces/stringMetadata'
+import {CRC,CRCMetadata} from './../interfaces/crc'
 import {} from 'node'
 
-abstract class Serializable {
-    private get serializeMetadata():CommomMetadata []{
+export abstract class Serializable {
+    public get serializeMetadata():CommonMetadata []{
         let _meta = Object
             .getPrototypeOf(this)
             ._metaSerialize;
@@ -19,10 +20,28 @@ abstract class Serializable {
             .sort((a, b) => a.position - b.position);
     }
 
+    public get messageMetadata():CommonMetadata []{
+        let _msg = Object.getPrototypeOf(this)._metaMessage;
+        if(_msg)
+            return Object.keys(_msg).map(o => Object.assign({
+                    name: o
+            }, _msg[o]));
+        else 
+            return [];
+    }
+
+    public get length(): number{
+        let metas = this.serializeMetadata;
+        let last = metas[metas.length - 1];
+        return last.position + last.length;
+    }
+
     public serialize() : Buffer{
         let metas = this.serializeMetadata;
-        let last = metas[metas.length - 1]
-        let buffer : Buffer = Buffer.allocUnsafe(last.position + last.length);
+        let msgs = this.messageMetadata;
+        let lastMeta = metas[metas.length-1];
+        let len = this.length;
+        let buffer : Buffer = Buffer.allocUnsafe(len);
         for (let meta of metas) {
             if (typeof(<any>this)[meta.name] === "number") {             
                 if ((<NumberMetadata>meta).bitOrder===null||(<NumberMetadata>meta).bitOrder === undefined) {
@@ -56,6 +75,17 @@ abstract class Serializable {
             if (typeof(<any>this)[meta.name]==="string") {
                 buffer.write((<any>this)[meta.name], meta.position, meta.length, (<StringMetadata>meta).textEncoding);
             }
+            if ((<any>this)[meta.name] instanceof Buffer) {
+                (<Buffer>((<any>this)[meta.name])).copy(buffer,meta.position,0,meta.length);
+            }
+            if ((<any>this)[meta.name] === undefined || (<any>this)[meta.name] === null) {
+                throw "Unset variable '" + meta.name + "' is not allowed!";
+            }
+        }
+        if(typeof((<any>this).crcInfo)!=="undefined"){
+            let thisAny = <any>this;
+            var crcBuff =Buffer.from((<CRC>((<any>this)[thisAny.crcInfo.name])).compute(<Array<number>><any>buffer.slice(thisAny.crcInfo.startByte,thisAny.crcInfo.stopByte)));
+            crcBuff.copy(buffer,lastMeta.position+lastMeta.length, 0, thisAny.crcInfo.length);
         }
         return buffer;
     }
@@ -96,4 +126,3 @@ abstract class Serializable {
         }
     }
 }
-export default Serializable

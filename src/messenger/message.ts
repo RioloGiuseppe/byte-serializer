@@ -1,21 +1,32 @@
-import Serializable from './../serializer/serializable'
+import {Serializable} from './../serializer/serializable'
+import {CRC, CRCMetadata} from '../interfaces/crc'
+import {} from 'node'
 
-abstract class Message  {
+export abstract class Message extends Serializable {
     public abstract start:number
-    public abstract head: number[]
-    public abstract end?:number
-    public length: number;
-
-    public toBytes(Data : Serializable){
-        let arr = new Array<number>();
-        arr.push(this.start)
-        arr.push(... this.head);
-        arr.push(... (<Array<number>><any>Data.serialize()));
-        if(typeof(this.end)==="number")
-            arr.push(this.end);
-        return Buffer.from(arr);
+    public abstract head: number[];
+    public abstract data: Buffer;
+    public abstract end:number | null;
+    public abstract CRC:CRC;
+   
+    public get crcInfo():CRCMetadata{
+        let msgs = this.messageMetadata;
+        let crcInfo:CRCMetadata;
+        if(msgs.length>0){
+            let crc =<any>msgs.find(o=>(<any>o).crcInfo !== undefined);
+            crcInfo = crc.crcInfo;
+            crcInfo.name = crc.name;
+        }
+        return crcInfo;
     }
 
+    public get length(): number{
+        let metas = this.serializeMetadata;
+        let crcInfo = this.crcInfo;
+        let last = metas[metas.length - 1]
+        let len = last.position + last.length;
+        if(crcInfo && crcInfo.length)
+            len+=crcInfo.length;
+        return len;
+    }
 }
-
-export default Message;

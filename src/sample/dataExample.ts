@@ -1,10 +1,12 @@
-import SerializerInfo from './../serializer/serializerInfo'
-import BitOrder from './../enums/bitOrder'
-import NumberType from './../enums/numberType'
-import TextEncoding from './../enums/textEncoding'
-import Serializable from './../serializer/serializable'
-
-class DataExample extends Serializable {
+import {SerializerInfo} from './../serializer/serializerInfo'
+import {BitOrder} from './../enums/bitOrder'
+import {NumberType} from './../enums/numberType'
+import {TextEncoding} from './../enums/textEncoding'
+import {Serializable} from './../serializer/serializable'
+/**
+ * @ignore
+ */
+export class DataExample extends Serializable {
     @SerializerInfo.position(0)
     @SerializerInfo.lenght(4)
     @SerializerInfo.bitOrder(BitOrder.BE)
@@ -24,5 +26,3 @@ class DataExample extends Serializable {
     public Text :string;
 
 }
-   
-export default DataExample
