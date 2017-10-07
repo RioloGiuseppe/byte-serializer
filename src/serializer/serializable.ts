@@ -56,7 +56,8 @@ export abstract class Serializable {
                         case NumberType.Int32:buffer.writeInt32BE((<any>this)[meta.name],meta.position);break;
                         case NumberType.UInt32:buffer.writeUInt32BE((<any>this)[meta.name],meta.position);break;
                         case NumberType.Float:buffer.writeFloatBE((<any>this)[meta.name],meta.position);break;
-                        case NumberType.Double:buffer.writeDoubleBE((<any>this)[meta.name],meta.position);break;                        default: throw "Unknown number type.";
+                        case NumberType.Double:buffer.writeDoubleBE((<any>this)[meta.name],meta.position);break;                        
+                        default: throw "Unknown number type.";
                     }
                 } else {
                     switch ((<NumberMetadata>meta).numberType) {

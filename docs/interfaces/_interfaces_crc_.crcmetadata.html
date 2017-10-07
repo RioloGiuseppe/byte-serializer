@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>StringMetadata | byte-serializer</title>
+	<title>CRCMetadata | byte-serializer</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_interfaces_stringmetadata_.html">&quot;interfaces/stringMetadata&quot;</a>
+					<a href="../modules/_interfaces_crc_.html">&quot;interfaces/crc&quot;</a>
 				</li>
 				<li>
-					<a href="_interfaces_stringmetadata_.stringmetadata.html">StringMetadata</a>
+					<a href="_interfaces_crc_.crcmetadata.html">CRCMetadata</a>
 				</li>
 			</ul>
-			<h1>Interface StringMetadata</h1>
+			<h1>Interface CRCMetadata</h1>
 		</div>
 	</div>
 </header>
@@ -73,12 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="_interfaces_commonmetadata_.commonmetadata.html" class="tsd-signature-type">CommonMetadata</a>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">StringMetadata</span>
-							</li>
-						</ul>
+						<span class="target">CRCMetadata</span>
 					</li>
 				</ul>
 			</section>
@@ -89,10 +84,10 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_interfaces_stringmetadata_.stringmetadata.html#length" class="tsd-kind-icon">length</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_interfaces_stringmetadata_.stringmetadata.html#name" class="tsd-kind-icon">name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_interfaces_stringmetadata_.stringmetadata.html#position" class="tsd-kind-icon">position</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_stringmetadata_.stringmetadata.html#textencoding" class="tsd-kind-icon">text<wbr>Encoding</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_crc_.crcmetadata.html#length" class="tsd-kind-icon">length</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_crc_.crcmetadata.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_crc_.crcmetadata.html#startbyte" class="tsd-kind-icon">start<wbr>Byte</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_interfaces_crc_.crcmetadata.html#stopbyte" class="tsd-kind-icon">stop<wbr>Byte</a></li>
 							</ul>
 						</section>
 					</div>
@@ -100,46 +95,43 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="length" class="tsd-anchor"></a>
 					<h3>length</h3>
 					<div class="tsd-signature tsd-kind-icon">length<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="_interfaces_commonmetadata_.commonmetadata.html">CommonMetadata</a>.<a href="_interfaces_commonmetadata_.commonmetadata.html#length">length</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/4405276/src/interfaces/commonMetadata.ts#L16">interfaces/commonMetadata.ts:16</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="name" class="tsd-anchor"></a>
-					<h3>name</h3>
-					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from <a href="_interfaces_commonmetadata_.commonmetadata.html">CommonMetadata</a>.<a href="_interfaces_commonmetadata_.commonmetadata.html#name">name</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/4405276/src/interfaces/commonMetadata.ts#L8">interfaces/commonMetadata.ts:8</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="position" class="tsd-anchor"></a>
-					<h3>position</h3>
-					<div class="tsd-signature tsd-kind-icon">position<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from <a href="_interfaces_commonmetadata_.commonmetadata.html">CommonMetadata</a>.<a href="_interfaces_commonmetadata_.commonmetadata.html#position">position</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/4405276/src/interfaces/commonMetadata.ts#L12">interfaces/commonMetadata.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/8c6901b/src/interfaces/crc.ts#L8">interfaces/crc.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="textencoding" class="tsd-anchor"></a>
-					<h3>text<wbr>Encoding</h3>
-					<div class="tsd-signature tsd-kind-icon">text<wbr>Encoding<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"ascii"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"utf8"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"utf16le"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"ucs2"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"base64"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"latin1"</span></div>
+					<a name="name" class="tsd-anchor"></a>
+					<h3>name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/4405276/src/interfaces/stringMetadata.ts#L5">interfaces/stringMetadata.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/8c6901b/src/interfaces/crc.ts#L9">interfaces/crc.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="startbyte" class="tsd-anchor"></a>
+					<h3>start<wbr>Byte</h3>
+					<div class="tsd-signature tsd-kind-icon">start<wbr>Byte<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/8c6901b/src/interfaces/crc.ts#L6">interfaces/crc.ts:6</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="stopbyte" class="tsd-anchor"></a>
+					<h3>stop<wbr>Byte</h3>
+					<div class="tsd-signature tsd-kind-icon">stop<wbr>Byte<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/8c6901b/src/interfaces/crc.ts#L7">interfaces/crc.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -172,13 +164,13 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_interfaces_commonmetadata_.html">"interfaces/common<wbr>Metadata"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_interfaces_crc_.html">"interfaces/crc"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_interfaces_numbermetadata_.html">"interfaces/number<wbr>Metadata"</a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_interfaces_stringmetadata_.html">"interfaces/string<wbr>Metadata"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -209,22 +201,25 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_interfaces_crc_.crc.html" class="tsd-kind-icon">CRC</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_interfaces_stringmetadata_.stringmetadata.html" class="tsd-kind-icon">String<wbr>Metadata</a>
+						<a href="_interfaces_crc_.crcmetadata.html" class="tsd-kind-icon">CRCMetadata</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="_interfaces_stringmetadata_.stringmetadata.html#length" class="tsd-kind-icon">length</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="_interfaces_stringmetadata_.stringmetadata.html#name" class="tsd-kind-icon">name</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="_interfaces_stringmetadata_.stringmetadata.html#position" class="tsd-kind-icon">position</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_crc_.crcmetadata.html#length" class="tsd-kind-icon">length</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_interfaces_stringmetadata_.stringmetadata.html#textencoding" class="tsd-kind-icon">text<wbr>Encoding</a>
+								<a href="_interfaces_crc_.crcmetadata.html#name" class="tsd-kind-icon">name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_crc_.crcmetadata.html#startbyte" class="tsd-kind-icon">start<wbr>Byte</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_interfaces_crc_.crcmetadata.html#stopbyte" class="tsd-kind-icon">stop<wbr>Byte</a>
 							</li>
 						</ul>
 					</li>

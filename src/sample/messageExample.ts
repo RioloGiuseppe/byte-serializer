@@ -20,16 +20,16 @@ export class MessageExample extends Message{
 
     @SerializerInfo.position(2)    
     @SerializerInfo.lenght(4)
-    public head: number[];
+    public head: Buffer;
     
-    @SerializerInfo.position(2)   
-    @SerializerInfo.lenght(10)
+    @SerializerInfo.position(6)   
+    @SerializerInfo.lenght(5)
     public data: Buffer
 
     @MessageInfo.enableLastChar()
     public end:number | null;
    
-    @MessageInfo.enableCRC(2,1,20)
+    @MessageInfo.enableCRC(2,1,11)
     public CRC:CRC;
 
     /**
@@ -38,7 +38,7 @@ export class MessageExample extends Message{
     constructor() {
         super();
         this.start = 0x00;
-        this.head = [0x01,0x02,0x03,0x04];
+        this.head = new Buffer([0x01,0x02,0x03,0x04]);
         this.data = new Buffer([0x05,0x06,0x07,0x08,0x09]);
         this.CRC = {
             compute:function(arr:Array<number>){

@@ -11,6 +11,6 @@
     "experimentalDecorators": true,
     "suppressExcessPropertyErrors": true,
     "suppressImplicitAnyIndexErrors": true,
-    "out": "doc",
+    "out": "docs",
     "excludePrivate": true
 }

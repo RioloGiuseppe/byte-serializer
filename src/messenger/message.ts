@@ -4,7 +4,7 @@ import {} from 'node'
 
 export abstract class Message extends Serializable {
     public abstract start:number
-    public abstract head: number[];
+    public abstract head: Buffer;
     public abstract data: Buffer;
     public abstract end:number | null;
     public abstract CRC:CRC;
