@@ -12,6 +12,7 @@
         "emitDecoratorMetadata": true,
         "lib": ["es2015", "es2017", "dom"]
     },
+    "compileOnSave": true,
     "include": [
         "./src/**/*"
     ]
