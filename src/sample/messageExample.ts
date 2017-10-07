@@ -26,7 +26,7 @@ export class MessageExample extends Message{
     @SerializerInfo.lenght(5)
     public data: Buffer
 
-    @MessageInfo.enableLastChar()
+    @MessageInfo.enableLastChar(true)
     public end:number | null;
    
     @MessageInfo.enableCRC(2,1,9)
@@ -40,6 +40,7 @@ export class MessageExample extends Message{
         this.start = 0x00;
         this.head = new Buffer([0x01,0x02,0x03,0x04]);
         this.data = new Buffer([0x05,0x06,0x07,0x08,0x09]);
+        this.end = 0xFF;
         this.CRC = {
             compute:function(arr:Array<number>){
                 return [0xFA,0xFB];

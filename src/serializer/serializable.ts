@@ -88,6 +88,9 @@ export abstract class Serializable {
             var crcBuff =Buffer.from((<CRC>((<any>this)[thisAny.crcInfo.name])).compute(<Array<number>><any>buffer.slice(thisAny.crcInfo.startByte,thisAny.crcInfo.stopByte)));
             crcBuff.copy(buffer,lastMeta.position+lastMeta.length, 0, thisAny.crcInfo.length);
         }
+        if(typeof((<any>this).endInfo)!=="undefined"){
+            buffer[buffer.length-1] = (<any>this)[(<any>this).endInfo.name];
+        }
         return buffer;
     }
 
