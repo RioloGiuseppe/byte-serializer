@@ -30,7 +30,7 @@ export abstract class Serializable {
             return [];
     }
 
-    public get length(): number{
+    public get bufferLength(): number{
         let metas = this.serializeMetadata;
         let last = metas[metas.length - 1];
         return last.position + last.length;
@@ -40,7 +40,7 @@ export abstract class Serializable {
         let metas = this.serializeMetadata;
         let msgs = this.messageMetadata;
         let lastMeta = metas[metas.length-1];
-        let len = this.length;
+        let len = this.bufferLength;
         let buffer : Buffer = Buffer.allocUnsafe(len);
         for (let meta of metas) {
             if (typeof(<any>this)[meta.name] === "number") {             

@@ -4,7 +4,6 @@ import {} from 'node'
 
 export abstract class Message extends Serializable {
     public abstract start:number
-    public abstract head: Buffer;
     public abstract data: Buffer;
     public abstract end:number | null;
     public abstract CRC:CRC;
@@ -20,7 +19,14 @@ export abstract class Message extends Serializable {
         return crcInfo;
     }
 
-    public get length(): number{
+    public get length():number{
+        let metas = this.serializeMetadata;
+        let crcInfo = this.crcInfo;
+        let last = metas[metas.length - 1]
+        return last.position + last.length -2;
+    }
+
+    public get bufferLength(): number{
         let metas = this.serializeMetadata;
         let crcInfo = this.crcInfo;
         let last = metas[metas.length - 1]

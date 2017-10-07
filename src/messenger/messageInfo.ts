@@ -16,9 +16,9 @@ export module MessageInfo {
 
     /**
      * Enable the CRC check of message.
-     * @param length Define the length of CRC algorithm out
-     * @param startByte Define the first byte of buffer to compute CRC
-     * @param lastByte Define the first byte of buffer to compute CRC
+     * @param length Define the name of the property of type CRC to compute crc @see {@link CRC}
+     * @param startByte Define the position of the first byte of the output array to compute crc
+     * @param lastByte Define the position of the last byte of the output array to compute crc
      */
     export function enableCRC(length:CrcLength, startByte : number, lastByte:number) {
         return function (target : any, propertyKey : string) : void {

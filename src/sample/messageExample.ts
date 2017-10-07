@@ -29,7 +29,7 @@ export class MessageExample extends Message{
     @MessageInfo.enableLastChar()
     public end:number | null;
    
-    @MessageInfo.enableCRC(2,1,11)
+    @MessageInfo.enableCRC(2,1,9)
     public CRC:CRC;
 
     /**
