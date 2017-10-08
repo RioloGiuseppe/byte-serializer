@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>NumberType | byte-serializer</title>
+	<title>PropertyType | byte-serializer</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_enums_numbertype_.html">&quot;enums/numberType&quot;</a>
+					<a href="../modules/_enums_propertytype_.html">&quot;enums/propertyType&quot;</a>
 				</li>
 				<li>
-					<a href="_enums_numbertype_.numbertype.html">NumberType</a>
+					<a href="_enums_propertytype_.propertytype.html">PropertyType</a>
 				</li>
 			</ul>
-			<h1>Enumeration NumberType</h1>
+			<h1>Enumeration PropertyType</h1>
 		</div>
 	</div>
 </header>
@@ -72,13 +72,8 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Used to define length and sign of number</p>
+						<p>Define the type of property</p>
 					</div>
-					<dl class="tsd-comment-tags">
-						<dt>see</dt>
-						<dd><p><a href="_enums_bitorder_.bitorder.html">BitOrder</a> for more details about byte ordering</p>
-						</dd>
-					</dl>
 				</div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -88,14 +83,9 @@
 						<section class="tsd-index-section ">
 							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_enums_numbertype_.numbertype.html#double" class="tsd-kind-icon">Double</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_enums_numbertype_.numbertype.html#float" class="tsd-kind-icon">Float</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_enums_numbertype_.numbertype.html#int16" class="tsd-kind-icon">Int16</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_enums_numbertype_.numbertype.html#int32" class="tsd-kind-icon">Int32</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_enums_numbertype_.numbertype.html#int8" class="tsd-kind-icon">Int8</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_enums_numbertype_.numbertype.html#uint16" class="tsd-kind-icon">UInt16</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_enums_numbertype_.numbertype.html#uint32" class="tsd-kind-icon">UInt32</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_enums_numbertype_.numbertype.html#uint8" class="tsd-kind-icon">UInt8</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_enums_propertytype_.propertytype.html#buffer" class="tsd-kind-icon">Buffer</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_enums_propertytype_.propertytype.html#number" class="tsd-kind-icon">Number</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="_enums_propertytype_.propertytype.html#string" class="tsd-kind-icon">String</a></li>
 							</ul>
 						</section>
 					</div>
@@ -104,122 +94,47 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Enumeration members</h2>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="double" class="tsd-anchor"></a>
-					<h3>Double</h3>
-					<div class="tsd-signature tsd-kind-icon">Double<span class="tsd-signature-symbol">:</span> </div>
+					<a name="buffer" class="tsd-anchor"></a>
+					<h3>Buffer</h3>
+					<div class="tsd-signature tsd-kind-icon">Buffer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;buffer&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/35ffa5c/src/enums/numberType.ts#L44">enums/numberType.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/35ffa5c/src/enums/propertyType.ts#L19">enums/propertyType.ts:19</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Refear a four byte - 32 bit - floating point</p>
+							<p>Set buffer type for the property</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="float" class="tsd-anchor"></a>
-					<h3>Float</h3>
-					<div class="tsd-signature tsd-kind-icon">Float<span class="tsd-signature-symbol">:</span> </div>
+					<a name="number" class="tsd-anchor"></a>
+					<h3>Number</h3>
+					<div class="tsd-signature tsd-kind-icon">Number<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;number&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/35ffa5c/src/enums/numberType.ts#L39">enums/numberType.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/35ffa5c/src/enums/propertyType.ts#L14">enums/propertyType.ts:14</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p> Refear a four byte - 32 bit - floating point</p>
+							<p>Set number type for the property</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="int16" class="tsd-anchor"></a>
-					<h3>Int16</h3>
-					<div class="tsd-signature tsd-kind-icon">Int16<span class="tsd-signature-symbol">:</span> </div>
+					<a name="string" class="tsd-anchor"></a>
+					<h3>String</h3>
+					<div class="tsd-signature tsd-kind-icon">String<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&quot;string&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/35ffa5c/src/enums/numberType.ts#L24">enums/numberType.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/35ffa5c/src/enums/propertyType.ts#L9">enums/propertyType.ts:9</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Refear a two byte - 16 bit - signed integer</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="int32" class="tsd-anchor"></a>
-					<h3>Int32</h3>
-					<div class="tsd-signature tsd-kind-icon">Int32<span class="tsd-signature-symbol">:</span> </div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/35ffa5c/src/enums/numberType.ts#L34">enums/numberType.ts:34</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Refear a four byte - 32 bit - signed integer</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="int8" class="tsd-anchor"></a>
-					<h3>Int8</h3>
-					<div class="tsd-signature tsd-kind-icon">Int8<span class="tsd-signature-symbol">:</span> </div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/35ffa5c/src/enums/numberType.ts#L14">enums/numberType.ts:14</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Refear a one byte - 8 bit - signed integer</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="uint16" class="tsd-anchor"></a>
-					<h3>UInt16</h3>
-					<div class="tsd-signature tsd-kind-icon">UInt16<span class="tsd-signature-symbol">:</span> </div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/35ffa5c/src/enums/numberType.ts#L19">enums/numberType.ts:19</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Refear a two byte - 16 bit - unsigned integer</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="uint32" class="tsd-anchor"></a>
-					<h3>UInt32</h3>
-					<div class="tsd-signature tsd-kind-icon">UInt32<span class="tsd-signature-symbol">:</span> </div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/35ffa5c/src/enums/numberType.ts#L29">enums/numberType.ts:29</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Refear a four byte - 32 bit - unsigned integer</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="uint8" class="tsd-anchor"></a>
-					<h3>UInt8</h3>
-					<div class="tsd-signature tsd-kind-icon">UInt8<span class="tsd-signature-symbol">:</span> </div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/35ffa5c/src/enums/numberType.ts#L9">enums/numberType.ts:9</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Refear a one byte - 8 bit - unsigned integer</p>
+							<p>Set string type for the property</p>
 						</div>
 					</div>
 				</section>
@@ -240,10 +155,10 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_enums_crclength_.html">"enums/crc<wbr>Length"</a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_enums_numbertype_.html">"enums/number<wbr>Type"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_enums_propertytype_.html">"enums/property<wbr>Type"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -298,31 +213,16 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-enum tsd-parent-kind-external-module">
-						<a href="_enums_numbertype_.numbertype.html" class="tsd-kind-icon">Number<wbr>Type</a>
+						<a href="_enums_propertytype_.propertytype.html" class="tsd-kind-icon">Property<wbr>Type</a>
 						<ul>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="_enums_numbertype_.numbertype.html#double" class="tsd-kind-icon">Double</a>
+								<a href="_enums_propertytype_.propertytype.html#buffer" class="tsd-kind-icon">Buffer</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="_enums_numbertype_.numbertype.html#float" class="tsd-kind-icon">Float</a>
+								<a href="_enums_propertytype_.propertytype.html#number" class="tsd-kind-icon">Number</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="_enums_numbertype_.numbertype.html#int16" class="tsd-kind-icon">Int16</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="_enums_numbertype_.numbertype.html#int32" class="tsd-kind-icon">Int32</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="_enums_numbertype_.numbertype.html#int8" class="tsd-kind-icon">Int8</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="_enums_numbertype_.numbertype.html#uint16" class="tsd-kind-icon">UInt16</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="_enums_numbertype_.numbertype.html#uint32" class="tsd-kind-icon">UInt32</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="_enums_numbertype_.numbertype.html#uint8" class="tsd-kind-icon">UInt8</a>
+								<a href="_enums_propertytype_.propertytype.html#string" class="tsd-kind-icon">String</a>
 							</li>
 						</ul>
 					</li>
