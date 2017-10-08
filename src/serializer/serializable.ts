@@ -1,6 +1,7 @@
 import {SerializerInfo} from './serializerInfo'
 import {BitOrder} from './../enums/bitOrder'
 import {NumberType} from './../enums/numberType'
+import {PropertyType} from './../enums/propertyType'
 import {CommonMetadata} from './../interfaces/commonMetadata'
 import {NumberMetadata} from './../interfaces/numberMetadata'
 import {StringMetadata} from './../interfaces/stringMetadata'
@@ -44,7 +45,7 @@ export abstract class Serializable {
         let buffer : Buffer = Buffer.allocUnsafe(len);
         for (let meta of metas) {
             
-            if (typeof(<any>this)[meta.name] === "number") {             
+            if (meta.propertyType === PropertyType.Number) {             
                 if ((<NumberMetadata>meta).bitOrder===null||(<NumberMetadata>meta).bitOrder === undefined) {
                     (<NumberMetadata>meta).bitOrder = BitOrder.BE;
                 }
@@ -74,10 +75,10 @@ export abstract class Serializable {
                     }
                 }
             }
-            if (typeof(<any>this)[meta.name]==="string") {
+            if (meta.propertyType === PropertyType.String) {
                 buffer.write((<any>this)[meta.name], meta.position, meta.length, (<StringMetadata>meta).textEncoding);
             }
-            if ((<any>this)[meta.name] instanceof Buffer) {
+            if (meta.propertyType === PropertyType.Buffer) {
                 (<Buffer>((<any>this)[meta.name])).copy(buffer,meta.position,0,meta.length);
             }
             if ((<any>this)[meta.name] === undefined || (<any>this)[meta.name] === null) {
@@ -110,7 +111,7 @@ export abstract class Serializable {
         for(let meta of metas){
             if(meta.ingnoreDeserialize)
                 continue;
-            if (typeof((<NumberMetadata>meta).numberType)!=="undefined") {           
+            if (meta.propertyType === PropertyType.Number) {           
                 if((<NumberMetadata>meta).bitOrder === BitOrder.BE) {
                     switch ((<NumberMetadata>meta).numberType) {
                         case NumberType.Int8:(<any>this)[meta.name] = buffer.readInt8(meta.position);break;
@@ -137,8 +138,11 @@ export abstract class Serializable {
                     }
                 }
             }
-            if (typeof((<StringMetadata>meta).textEncoding)!=="undefined") {
+            if (meta.propertyType === PropertyType.String) {
                 (<any>this)[meta.name] = buffer.toString((<StringMetadata>meta).textEncoding, meta.position,  meta.position + meta.length);
+            }
+            if (meta.propertyType === PropertyType.Buffer) {
+                (<any>this)[meta.name] = new Buffer(5);
             }
         }
     }

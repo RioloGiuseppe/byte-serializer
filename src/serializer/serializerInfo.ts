@@ -1,6 +1,7 @@
 import {BitOrder} from './../enums/bitOrder'
 import {NumberType} from './../enums/numberType'
 import {TextEncoding} from './../enums/textEncoding'
+import {PropertyType} from './../enums/propertyType'
 
 /**
  * Contains main decorator for properties of all serializable object
@@ -42,6 +43,17 @@ export module SerializerInfo {
     export function numberType(value : NumberType) {
         return function (target : any, propertyKey : string) : any {
             addMeta(target, propertyKey, "numberType", value);
+            addMeta(target, propertyKey, "propertyType", PropertyType.Number);            
+        }
+    }
+
+    /**
+     * Define the type of property
+     * @see {link TextEncoding}
+     */
+    export function propertyType(value : PropertyType) {
+        return function (target : any, propertyKey : string) : any {
+            addMeta(target, propertyKey, "propertyType", value);
         }
     }
 
@@ -52,6 +64,8 @@ export module SerializerInfo {
     export function textEncoding(value : TextEncoding) {
         return function (target : any, propertyKey : string) : any {
             addMeta(target, propertyKey, "textEncoding", value);
+            addMeta(target, propertyKey, "propertyType", PropertyType.String);
+            
         }
     }
 
