@@ -12,10 +12,12 @@ export class MessageExample extends Message{
  
     @SerializerInfo.position(0)
     @SerializerInfo.numberType(NumberType.UInt8)
+    @SerializerInfo.ingnoreDeserialize
     public start:number
 
     @SerializerInfo.position(1) 
     @SerializerInfo.numberType(NumberType.UInt8)  
+    @SerializerInfo.ingnoreDeserialize  
     public length: number;
 
     @SerializerInfo.position(2)    
@@ -29,7 +31,7 @@ export class MessageExample extends Message{
     @MessageInfo.enableLastChar(true)
     public end:number | null;
    
-    @MessageInfo.enableCRC(2,1,9)
+    @MessageInfo.enableCRC(2,2,10)
     public CRC:CRC;
 
     /**
@@ -43,7 +45,7 @@ export class MessageExample extends Message{
         this.end = 0xFF;
         this.CRC = {
             compute:function(arr:Array<number>){
-                return [0xFA,0xFB];
+                return Buffer.from([0xFA,0xFB]);
             }
         }
     }

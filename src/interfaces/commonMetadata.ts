@@ -14,4 +14,14 @@ export interface CommonMetadata {
      * Define the length of the property in byte
      */
     length : number
+
+    /**
+     * Defines whether a property must be ignored in serialization
+     */
+    ingnoreDeserialize: boolean;
+
+    /**
+     * Defines whether a property must be ignored in deserialization
+     */
+    ingnoreSerialize: boolean;
 }

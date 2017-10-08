@@ -54,6 +54,20 @@ export module SerializerInfo {
             addMeta(target, propertyKey, "textEncoding", value);
         }
     }
+
+    /**
+     * Defines whether a property must be ignored in serialization
+     */
+    export function ingnoreSerialize(target : any, propertyKey : string) : any {
+        addMeta(target, propertyKey, "ingnoreSerialize", true);
+    }
+
+    /**
+     * Defines whether a property must be ignored in deserialization
+     */
+    export function ingnoreDeserialize(target : any, propertyKey : string) : any {
+        addMeta(target, propertyKey, "ingnoreDeserialize", true);
+    }
     
     /**
      * @ignore

@@ -3,7 +3,7 @@ import {CrcLength} from './../enums/crcLength'
  * Define the interface for CRC algorithm injection
  */
 export interface CRC {
-    compute(data : Array<number>): Array<number>;
+    compute(data : Array<number>): Buffer;
 }
 
 /**

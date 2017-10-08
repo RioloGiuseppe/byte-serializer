@@ -43,6 +43,7 @@ export abstract class Serializable {
         let len = this.bufferLength;
         let buffer : Buffer = Buffer.allocUnsafe(len);
         for (let meta of metas) {
+            
             if (typeof(<any>this)[meta.name] === "number") {             
                 if ((<NumberMetadata>meta).bitOrder===null||(<NumberMetadata>meta).bitOrder === undefined) {
                     (<NumberMetadata>meta).bitOrder = BitOrder.BE;
@@ -96,7 +97,19 @@ export abstract class Serializable {
 
     public deserialize(buffer: Buffer){
         let metas = this.serializeMetadata;
+        let msgs = this.messageMetadata;
+        let lastMeta = metas[metas.length-1];
+        let len = this.bufferLength;
+        if(typeof((<any>this).crcInfo)!=="undefined"){
+            let thisAny = <any>this;
+            var crcBuff =(<CRC>((<any>this)[thisAny.crcInfo.name])).compute(<Array<number>><any>buffer.slice(thisAny.crcInfo.startByte,thisAny.crcInfo.stopByte));
+            let crcread= buffer.slice(lastMeta.position+lastMeta.length,lastMeta.position+lastMeta.length+(<CRCMetadata>thisAny.crcInfo).length);
+            if(crcBuff.compare(crcread)!==0)
+                throw "CRC not match";
+        }
         for(let meta of metas){
+            if(meta.ingnoreDeserialize)
+                continue;
             if (typeof((<NumberMetadata>meta).numberType)!=="undefined") {           
                 if((<NumberMetadata>meta).bitOrder === BitOrder.BE) {
                     switch ((<NumberMetadata>meta).numberType) {
