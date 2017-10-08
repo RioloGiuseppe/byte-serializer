@@ -85,6 +85,8 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-is-not-exported"><a href="_serializer_serializerinfo_.serializerinfo.html#addmeta" class="tsd-kind-icon">add<wbr>Meta</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_serializer_serializerinfo_.serializerinfo.html#bitorder" class="tsd-kind-icon">bit<wbr>Order</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_serializer_serializerinfo_.serializerinfo.html#ingnoredeserialize" class="tsd-kind-icon">ingnore<wbr>Deserialize</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_serializer_serializerinfo_.serializerinfo.html#ingnoreserialize" class="tsd-kind-icon">ingnore<wbr>Serialize</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_serializer_serializerinfo_.serializerinfo.html#lenght" class="tsd-kind-icon">lenght</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_serializer_serializerinfo_.serializerinfo.html#numbertype" class="tsd-kind-icon">number<wbr>Type</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_serializer_serializerinfo_.serializerinfo.html#position" class="tsd-kind-icon">position</a></li>
@@ -106,7 +108,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/ceb3d84/src/serializer/serializerInfo.ts#L61">serializer/serializerInfo.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/678ce5d/src/serializer/serializerInfo.ts#L75">serializer/serializerInfo.ts:75</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -144,7 +146,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/ceb3d84/src/serializer/serializerInfo.ts#L14">serializer/serializerInfo.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/678ce5d/src/serializer/serializerInfo.ts#L14">serializer/serializerInfo.ts:14</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -168,6 +170,68 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="ingnoredeserialize" class="tsd-anchor"></a>
+					<h3>ingnore<wbr>Deserialize</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">ingnore<wbr>Deserialize<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, propertyKey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/678ce5d/src/serializer/serializerInfo.ts#L68">serializer/serializerInfo.ts:68</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Defines whether a property must be ignored in deserialization</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>target: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>propertyKey: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="ingnoreserialize" class="tsd-anchor"></a>
+					<h3>ingnore<wbr>Serialize</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">ingnore<wbr>Serialize<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, propertyKey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/678ce5d/src/serializer/serializerInfo.ts#L61">serializer/serializerInfo.ts:61</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Defines whether a property must be ignored in serialization</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>target: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>propertyKey: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 					<a name="lenght" class="tsd-anchor"></a>
 					<h3>lenght</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
@@ -177,7 +241,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/ceb3d84/src/serializer/serializerInfo.ts#L23">serializer/serializerInfo.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/678ce5d/src/serializer/serializerInfo.ts#L23">serializer/serializerInfo.ts:23</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -205,7 +269,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/ceb3d84/src/serializer/serializerInfo.ts#L42">serializer/serializerInfo.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/678ce5d/src/serializer/serializerInfo.ts#L42">serializer/serializerInfo.ts:42</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -238,7 +302,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/ceb3d84/src/serializer/serializerInfo.ts#L32">serializer/serializerInfo.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/678ce5d/src/serializer/serializerInfo.ts#L32">serializer/serializerInfo.ts:32</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -266,7 +330,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/ceb3d84/src/serializer/serializerInfo.ts#L52">serializer/serializerInfo.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/RioloGiuseppe/byte-serializer/blob/678ce5d/src/serializer/serializerInfo.ts#L52">serializer/serializerInfo.ts:52</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -368,6 +432,12 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="_serializer_serializerinfo_.serializerinfo.html#bitorder" class="tsd-kind-icon">bit<wbr>Order</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_serializer_serializerinfo_.serializerinfo.html#ingnoredeserialize" class="tsd-kind-icon">ingnore<wbr>Deserialize</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="_serializer_serializerinfo_.serializerinfo.html#ingnoreserialize" class="tsd-kind-icon">ingnore<wbr>Serialize</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="_serializer_serializerinfo_.serializerinfo.html#lenght" class="tsd-kind-icon">lenght</a>
