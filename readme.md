@@ -10,7 +10,7 @@
 # How to use
 
 ### Install dependencies:
-The main dependencie of this module is **typescript** compiler **tsc**. You need to install typescript because you will recompile your data type definition to be serializable.
+The main dependencie of this module is **typescript** compiler **tsc**.
 ```sh
 npm install -g typescript
 ```
@@ -22,7 +22,7 @@ npm install byte-serializer
 
 ### Use in your project
 
-After added in your project you have to import some module dependencies:
+After the library were added in your project, you have to import some modules dependencies:
 - TextEncoding: _enum_
 - NumberType: _enum_
 - BitOrder: _enum_
@@ -136,4 +136,3 @@ newData.deserialize(newMessage.data);
 ### Note
 - Actually library is nor released in npm
 - Actually dynamic length payload in message is not supported
-- Actually deserialization alg is not complete

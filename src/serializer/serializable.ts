@@ -161,7 +161,7 @@ export abstract class Serializable {
                 (<any>this)[meta.name] = buffer.toString((<StringMetadata>meta).textEncoding, meta.position,  meta.position + meta.length);
             }
             if (meta.propertyType === PropertyType.Buffer) {
-                (<any>this)[meta.name] = new Buffer(5);
+                (<any>this)[meta.name] = Buffer.from(buffer.slice(meta.position, meta.position + meta.length));
             }
         }
     }
