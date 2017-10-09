@@ -8,7 +8,14 @@ import {StringMetadata} from './../interfaces/stringMetadata'
 import {CRC,CRCMetadata} from './../interfaces/crc'
 import {} from 'node'
 
+/**
+ * Define the structure of the serializable payload and embed the main methods to transform array in to object and vice versa.
+ */
 export abstract class Serializable {
+   
+    /**
+    * Return the serialization metadata for current type
+    */
     public get serializeMetadata():CommonMetadata []{
         let _meta = Object
             .getPrototypeOf(this)
@@ -21,6 +28,9 @@ export abstract class Serializable {
             .sort((a, b) => a.position - b.position);
     }
 
+    /**
+     * Return the additional metadata for current message type configuration
+     */
     public get messageMetadata():CommonMetadata []{
         let _msg = Object.getPrototypeOf(this)._metaMessage;
         if(_msg)
@@ -31,12 +41,18 @@ export abstract class Serializable {
             return [];
     }
 
+    /**
+     * Return the length of entire buffer
+     */
     public get bufferLength(): number{
         let metas = this.serializeMetadata;
         let last = metas[metas.length - 1];
         return last.position + last.length;
     }
 
+    /**
+     * Return a buffer that contains all data information stored in properties of the current instance of the object
+     */
     public serialize() : Buffer{
         let metas = this.serializeMetadata;
         let msgs = this.messageMetadata;
@@ -96,6 +112,9 @@ export abstract class Serializable {
         return buffer;
     }
 
+    /**
+     * Set values of properties from a buffer
+     */
     public deserialize(buffer: Buffer){
         let metas = this.serializeMetadata;
         let msgs = this.messageMetadata;
