@@ -5,7 +5,9 @@
 ---
 
 # Description
-<>
+The main purpose of this library is create a small and reusable serialization engine able to manage serial message protocol. The use of property decorators has allowed to reduce serialization/deserialization to a loop around properties metadata obtained at initialization time. The module has two model: one for data and another one for messages.<br>
+Data model is made to allow data (de)serialization, message module to allow to send/receive datas. Both work with buffer (byte array) and Message model is a specialization of Data model.
+
 
 # How to use
 

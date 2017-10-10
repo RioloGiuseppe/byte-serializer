@@ -12,5 +12,6 @@
     "suppressExcessPropertyErrors": true,
     "suppressImplicitAnyIndexErrors": true,
     "out": "docs",
-    "excludePrivate": true
+    "excludePrivate": true,
+    "readme": "readme.md"
 }
