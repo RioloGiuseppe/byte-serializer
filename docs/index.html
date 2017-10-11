@@ -96,7 +96,7 @@
 				<p>To create a <em>serializable payload</em> you have to <strong>extends</strong> imported type serializable and then use decorators contained in SerializerInfo to define position, length, type and data specification of properties you have inside.</p>
 				<p>A <em>serializable payload</em> is just an object that can be serialized in a byte array (buffer). If you want to send, or receive, the paylod you have to add some metadatas such as start byte, expected length (or just length), id, crc and abviously data. You can choose to add a end byte to mark the end of message. For this pourpose you have to extend abstract class Message.</p>
 				<h4 id="define-a-payload">Define a payload</h4>
-				<pre><code class="lang-ts"><span class="hljs-keyword">import</span> {SerializerInfo,Serializable,BitOrder,NumberType,TextEncoding} <span class="hljs-keyword">from</span> <span class="hljs-string">'byte-serializer'</span>
+				<pre><code class="lang-ts"><span class="hljs-keyword">import</span> {Serializable, SerializerInfo, BitOrder, NumberType, TextEncoding} <span class="hljs-keyword">from</span> <span class="hljs-string">'byte-serializer'</span>
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> DataExample <span class="hljs-keyword">extends</span> Serializable {
     <span class="hljs-meta">@SerializerInfo</span>.position(<span class="hljs-number">0</span>)
@@ -118,7 +118,7 @@
 }
 </code></pre>
 				<h4 id="define-a-message">Define a message</h4>
-				<pre><code class="lang-ts"><span class="hljs-keyword">import</span> {Message,SerializerInfo,CRC,NumberType,NumberType,PropertyType} <span class="hljs-keyword">from</span> <span class="hljs-string">'byte-serializer'</span>
+				<pre><code class="lang-ts"><span class="hljs-keyword">import</span> {Message, MessageInfo, SerializerInfo, CRC, NumberType, PropertyType} <span class="hljs-keyword">from</span> <span class="hljs-string">'byte-serializer'</span>
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> MessageExample <span class="hljs-keyword">extends</span> Message{
 

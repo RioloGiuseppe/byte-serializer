@@ -42,7 +42,7 @@ A _serializable payload_ is just an object that can be serialized in a byte arra
 
 #### Define a payload
 ```ts
-import {SerializerInfo,Serializable,BitOrder,NumberType,TextEncoding} from 'byte-serializer'
+import {Serializable, SerializerInfo, BitOrder, NumberType, TextEncoding} from 'byte-serializer'
 
 export class DataExample extends Serializable {
     @SerializerInfo.position(0)
@@ -65,7 +65,7 @@ export class DataExample extends Serializable {
 ```
 #### Define a message
 ```ts
-import {Message,SerializerInfo,CRC,NumberType,NumberType,PropertyType} from 'byte-serializer'
+import {Message, MessageInfo, SerializerInfo, CRC, NumberType, PropertyType} from 'byte-serializer'
 
 export class MessageExample extends Message{
  
