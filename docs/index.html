@@ -168,9 +168,9 @@
 					<h4 id="create-a-message">Create a message</h4>
 					<pre><code class="lang-ts"><span class="hljs-keyword">let</span> data = <span class="hljs-keyword">new</span> DataExample();
 <span class="hljs-keyword">let</span> message = <span class="hljs-keyword">new</span> MessageExample();
-data.Pippo = <span class="hljs-number">50</span>;
-data.Pluto = <span class="hljs-number">2000</span>;
-data.Text = <span class="hljs-string">"una stringa"</span>;
+data.Number1 = <span class="hljs-number">50</span>;
+data.Number2 = <span class="hljs-number">2000</span>;
+data.Text = <span class="hljs-string">"A long string"</span>; <span class="hljs-comment">// More the 10 chars</span>
 </code></pre>
 				</blockquote>
 				<h4 id="serialize-a-message">Serialize a message</h4>
@@ -186,7 +186,6 @@ newData.deserialize(newMessage.data);
 </code></pre>
 				<h3 id="note">Note</h3>
 				<ul>
-					<li>Actually library is nor released in npm</li>
 					<li>Actually dynamic length payload in message is not supported</li>
 				</ul>
 			</div>

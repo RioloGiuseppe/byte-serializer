@@ -1,23 +1,45 @@
 {
     "name": "byte-serializer",
-    "version": "0.0.2",
-    "description": "",
-    "main": "index.js",
+    "displayName": "byte-serializer",
+    "version": "0.0.4",
+    "description": "Simple and high speed serializer for nodejs.",
+    "main": "build/index.js",
+    "typings": "./src/index.ts",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "doc": "typedoc --options typedoc.json"
+        "prepublish": "tsc",
+        "doc": "typedoc --options typedoc.json",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "byte",
+        "serialization",
+        "deserialization",
+        "buffer",
+        "typescript",
+        "decorators"
+    ],
+    "directories": {
+        "example": "src/samples"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/RioloGiuseppe/byte-serializer.git"
     },
-    "author": "",
+    "author": {
+        "name": "Giuseppe Riolo",
+        "email": "riolo.giuseppe@gmail.com"
+    },
+    "maintainers": [{
+        "name": "Giuseppe Riolo",
+        "email": "riolo.giuseppe@gmail.com"
+    }],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/RioloGiuseppe/byte-serializer/issues"
     },
-    "homepage": "https://github.com/RioloGiuseppe/byte-serializer#readme",
+    "homepage": "https://riologiuseppe.github.io/byte-serializer",
+    "readme": "https://github.com/RioloGiuseppe/byte-serializer#readme",
     "devDependencies": {
-        "@types/node": "^8.0.31"
+        "@types/node": "^8.0.34"
     }
 }

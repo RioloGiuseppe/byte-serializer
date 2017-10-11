@@ -115,9 +115,9 @@ export class MessageExample extends Message{
 ```ts
 let data = new DataExample();
 let message = new MessageExample();
-data.Pippo = 50;
-data.Pluto = 2000;
-data.Text = "una stringa";
+data.Number1 = 50;
+data.Number2 = 2000;
+data.Text = "A long string"; // More the 10 chars
 ```
 
 #### Serialize a message
@@ -136,5 +136,4 @@ newData.deserialize(newMessage.data);
 ```
 
 ### Note
-- Actually library is nor released in npm
 - Actually dynamic length payload in message is not supported
