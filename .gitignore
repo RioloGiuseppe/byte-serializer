@@ -69,3 +69,5 @@ typings/
 !.vscode/launch.json
 !.vscode/extensions.json
 .history
+
+build/**/*

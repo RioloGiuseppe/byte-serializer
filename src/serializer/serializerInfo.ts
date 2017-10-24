@@ -43,6 +43,7 @@ export module SerializerInfo {
     export function numberType(value : NumberType) {
         return function (target : any, propertyKey : string) : any {
             addMeta(target, propertyKey, "numberType", value);
+            addMeta(target, propertyKey, "length", value);
             addMeta(target, propertyKey, "propertyType", PropertyType.Number);            
         }
     }

@@ -22,6 +22,6 @@ let g = a2.Pippo;
 let m = new MessageExample();
 let m2 = new MessageExample()
 let ser = m.serialize();
-m2.deserialize(ser);
+//m2.deserialize(ser);
 
 console.log(ser);

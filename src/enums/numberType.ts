@@ -6,40 +6,40 @@ export enum NumberType {
     /**
      * Refear a one byte - 8 bit - unsigned integer
      */
-    UInt8,
+    UInt8=1,
 
     /**
      * Refear a one byte - 8 bit - signed integer
      */
-    Int8,
+    Int8=1,
     
     /**
      * Refear a two byte - 16 bit - unsigned integer
      */
-    UInt16,
+    UInt16=2,
     
     /**
      * Refear a two byte - 16 bit - signed integer
      */
-    Int16,
+    Int16=2,
     
     /**
      * Refear a four byte - 32 bit - unsigned integer
      */
-    UInt32,
+    UInt32=4,
     
     /**
      * Refear a four byte - 32 bit - signed integer
      */
-    Int32,
+    Int32=4,
     
     /**
      *  Refear a four byte - 32 bit - floating point
      */
-    Float,
+    Float=4,
     
     /**
      * Refear a four byte - 32 bit - floating point
      */
-    Double
+    Double=4
 }

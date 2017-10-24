@@ -13,32 +13,40 @@ import {} from 'node'
  */
 export abstract class Serializable {
    
+
+    private _serializeMetadata:CommonMetadata[];
+    private _messageMetadata:CommonMetadata[];
+    private _bufferLength:number;
+
     /**
     * Return the serialization metadata for current type
     */
     public get serializeMetadata():CommonMetadata []{
-        let _meta = Object
-            .getPrototypeOf(this)
-            ._metaSerialize;
-        return Object
-            .keys(_meta)
+        if(this._serializeMetadata)
+            return this._serializeMetadata;
+        let _meta = Object.getPrototypeOf(this)._metaSerialize;
+        this._serializeMetadata = Object            .keys(_meta)
             .map(o => Object.assign({
                 name: o
             }, _meta[o]))
             .sort((a, b) => a.position - b.position);
+        return this._serializeMetadata
     }
 
     /**
      * Return the additional metadata for current message type configuration
      */
-    public get messageMetadata():CommonMetadata []{
+    public get messageMetadata():CommonMetadata [] { 
+        if(this._messageMetadata)
+            return this._messageMetadata;
         let _msg = Object.getPrototypeOf(this)._metaMessage;
         if(_msg)
-            return Object.keys(_msg).map(o => Object.assign({
+            this._messageMetadata=  Object.keys(_msg).map(o => Object.assign({
                     name: o
             }, _msg[o]));
         else 
-            return [];
+            this._messageMetadata = [];
+        return this._messageMetadata;
     }
 
     /**
@@ -47,7 +55,8 @@ export abstract class Serializable {
     public get bufferLength(): number{
         let metas = this.serializeMetadata;
         let last = metas[metas.length - 1];
-        return last.position + last.length;
+        this._bufferLength = last.position + last.length;
+        return this._bufferLength;
     }
 
     /**
@@ -60,7 +69,6 @@ export abstract class Serializable {
         let len = this.bufferLength;
         let buffer : Buffer = Buffer.allocUnsafe(len);
         for (let meta of metas) {
-            
             if (meta.propertyType === PropertyType.Number) {             
                 if ((<NumberMetadata>meta).bitOrder===null||(<NumberMetadata>meta).bitOrder === undefined) {
                     (<NumberMetadata>meta).bitOrder = BitOrder.BE;
@@ -92,10 +100,24 @@ export abstract class Serializable {
                 }
             }
             if (meta.propertyType === PropertyType.String) {
-                buffer.write((<any>this)[meta.name], meta.position, meta.length, (<StringMetadata>meta).textEncoding);
+                let l = 0;
+                if(typeof(meta.length)==="number")
+                    l = meta.length;
+                else if(typeof((<any>this)[meta.name].length)==="number")
+                    l = (<any>this)[meta.name].length;
+                else
+                    throw "Invalid length for " + meta.name + " field";
+                buffer.write((<any>this)[meta.name], meta.position, l, (<StringMetadata>meta).textEncoding);
             }
             if (meta.propertyType === PropertyType.Buffer) {
-                (<Buffer>((<any>this)[meta.name])).copy(buffer,meta.position,0,meta.length);
+                let l = 0;
+                if(typeof(meta.length)==="number")
+                    l = meta.length;
+                else if(typeof((<any>this)[meta.name].length)==="number")
+                    l = (<any>this)[meta.name].length;
+                else
+                    throw "Invalid length for " + meta.name + " field";
+                (<Buffer>((<any>this)[meta.name])).copy(buffer, meta.position, 0, l);
             }
             if ((<any>this)[meta.name] === undefined || (<any>this)[meta.name] === null) {
                 throw "Unset variable '" + meta.name + "' is not allowed!";
@@ -103,8 +125,15 @@ export abstract class Serializable {
         }
         if(typeof((<any>this).crcInfo)!=="undefined"){
             let thisAny = <any>this;
+            let l = 0;
+            if(typeof(lastMeta.length)==="number")
+                l = lastMeta.length;
+            else if(typeof((<any>this)[lastMeta.name].length)==="number")
+                l = (<any>this)[lastMeta.name].length;
+            else
+                throw "Invalid length for " + lastMeta.name + " field";
             var crcBuff =Buffer.from((<CRC>((<any>this)[thisAny.crcInfo.name])).compute(<Array<number>><any>buffer.slice(thisAny.crcInfo.startByte,thisAny.crcInfo.stopByte)));
-            crcBuff.copy(buffer,lastMeta.position+lastMeta.length, 0, thisAny.crcInfo.length);
+            crcBuff.copy(buffer,lastMeta.position+l, 0, thisAny.crcInfo.length);
         }
         if(typeof((<any>this).endInfo)!=="undefined"){
             buffer[buffer.length-1] = (<any>this)[(<any>this).endInfo.name];
