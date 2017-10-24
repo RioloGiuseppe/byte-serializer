@@ -1,12 +1,12 @@
 {
     "name": "byte-serializer",
     "displayName": "byte-serializer",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "Simple and high speed serializer for nodejs.",
-    "main": "build/index.js",
-    "typings": "./src/index.ts",
+    "main": "dist/index.js",
+    "typings": "./dist/index.d.ts",
     "scripts": {
-        "prepublish": "tsc",
+        "prepublish": "tsc --outDir dist",
         "doc": "typedoc --options typedoc.json",
         "test": "echo \"Error: no test specified\" && exit 1"
     },

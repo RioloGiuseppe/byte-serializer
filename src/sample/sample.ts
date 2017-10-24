@@ -20,8 +20,14 @@ a2.deserialize(aBuffer)
 let g = a2.Pippo;
 
 let m = new MessageExample();
+m.head = new Buffer([0x01,0x02,0x03,0x04]);
+m.data = new Buffer([0x05,0x06,0x07,0x08,0x09]);
+
+
+
+
 let m2 = new MessageExample()
 let ser = m.serialize();
-//m2.deserialize(ser);
+m2.deserialize(ser);
 
 console.log(ser);

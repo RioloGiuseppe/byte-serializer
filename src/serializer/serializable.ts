@@ -146,18 +146,21 @@ export abstract class Serializable {
      */
     public deserialize(buffer: Buffer){
         let metas = this.serializeMetadata;
-        let msgs = this.messageMetadata;
-        let lastMeta = metas[metas.length-1];
-        let len = this.bufferLength;
+        let len = buffer.length;
+        let end  =typeof( (<any>this).endInfo) !=="undefined" && (<any>this).endInfo.enable !== false ? (<any>this)[(<any>this).endInfo.name] : null;
+        if (end !== null && typeof(end) === "number" && buffer[buffer.length-1] !== end)
+           throw "unexpected end of frame"
+        let dyn = len - 2 - (typeof((<any>this).crcInfo) !== "undefined" && typeof((<any>this).crcInfo.length) === "number" ? (<any>this).crcInfo.length : 0) - (end ? 1 : 0);
+        dyn -= metas.filter(o=>!o.ignoreDeserialize && typeof(o.length) ==="number").reduce((a, b)=>a+b.length, 0)
         if(typeof((<any>this).crcInfo)!=="undefined"){
             let thisAny = <any>this;
             var crcBuff =(<CRC>((<any>this)[thisAny.crcInfo.name])).compute(<Array<number>><any>buffer.slice(thisAny.crcInfo.startByte,thisAny.crcInfo.stopByte));
-            let crcread= buffer.slice(lastMeta.position+lastMeta.length,lastMeta.position+lastMeta.length+(<CRCMetadata>thisAny.crcInfo).length);
+            let crcread= buffer.slice(len - (<CRCMetadata>thisAny.crcInfo).length - (end ? 1 : 0), len - (end ? 1 : 0));
             if(crcBuff.compare(crcread)!==0)
                 throw "CRC not match";
         }
         for(let meta of metas){
-            if(meta.ingnoreDeserialize)
+            if(meta.ignoreDeserialize)
                 continue;
             if (meta.propertyType === PropertyType.Number) {           
                 if((<NumberMetadata>meta).bitOrder === BitOrder.BE) {
@@ -186,11 +189,15 @@ export abstract class Serializable {
                     }
                 }
             }
+
             if (meta.propertyType === PropertyType.String) {
-                (<any>this)[meta.name] = buffer.toString((<StringMetadata>meta).textEncoding, meta.position,  meta.position + meta.length);
+                let l = typeof(meta.length) !== "undefined" ? meta.length : dyn;
+                (<any>this)[meta.name] = buffer.toString((<StringMetadata>meta).textEncoding, meta.position, meta.position + l);
             }
+
             if (meta.propertyType === PropertyType.Buffer) {
-                (<any>this)[meta.name] = Buffer.from(buffer.slice(meta.position, meta.position + meta.length));
+                let l = typeof(meta.length) !== "undefined" ? meta.length : dyn;
+                (<any>this)[meta.name] = Buffer.from(buffer.slice(meta.position, meta.position + l));
             }
         }
     }
