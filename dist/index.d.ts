@@ -7,3 +7,6 @@ export { Serializable } from './serializer/serializable';
 export { SerializerInfo } from './serializer/serializerInfo';
 export { Message } from './messenger/message';
 export { MessageInfo } from './messenger/MessageInfo';
+export { CommonMetadata } from './interfaces/commonMetadata';
+export { NumberMetadata } from './interfaces/numberMetadata';
+export { StringMetadata } from './interfaces/stringMetadata';

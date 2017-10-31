@@ -17,5 +17,9 @@ var PropertyType;
      * Set buffer type for the property
      */
     PropertyType["Buffer"] = "buffer";
+    /**
+     * Set the object type for the property
+     */
+    PropertyType["Object"] = "object";
 })(PropertyType = exports.PropertyType || (exports.PropertyType = {}));
 //# sourceMappingURL=propertyType.js.map

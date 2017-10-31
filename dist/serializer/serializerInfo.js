@@ -41,7 +41,7 @@ var SerializerInfo;
     function numberType(value) {
         return function (target, propertyKey) {
             addMeta(target, propertyKey, "numberType", value);
-            addMeta(target, propertyKey, "length", value);
+            addMeta(target, propertyKey, "length", Math.abs(value));
             addMeta(target, propertyKey, "propertyType", propertyType_1.PropertyType.Number);
         };
     }
@@ -81,6 +81,13 @@ var SerializerInfo;
         addMeta(target, propertyKey, "ignoreDeserialize", true);
     }
     SerializerInfo.ignoreDeserialize = ignoreDeserialize;
+    function nested(value) {
+        return function (target, propertyKey) {
+            addMeta(target, propertyKey, "nestedType", value);
+            addMeta(target, propertyKey, "propertyType", propertyType_1.PropertyType.Object);
+        };
+    }
+    SerializerInfo.nested = nested;
     /**
      * @ignore
      */

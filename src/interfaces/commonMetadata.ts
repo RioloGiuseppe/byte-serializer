@@ -1,3 +1,5 @@
+import {ISerializable} from '../serializer/serializable'
+
 /**
  * Define the common interface for all types of serialization info
  */
@@ -29,4 +31,6 @@ export interface CommonMetadata {
      * Define the type of property
      */
     propertyType:string
+
+    nestedType:ISerializable;
 }

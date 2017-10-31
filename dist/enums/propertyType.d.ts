@@ -14,4 +14,8 @@ export declare enum PropertyType {
      * Set buffer type for the property
      */
     Buffer = "buffer",
+    /**
+     * Set the object type for the property
+     */
+    Object = "object",
 }

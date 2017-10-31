@@ -2,6 +2,7 @@ import { BitOrder } from './../enums/bitOrder';
 import { NumberType } from './../enums/numberType';
 import { TextEncoding } from './../enums/textEncoding';
 import { PropertyType } from './../enums/propertyType';
+import { ISerializable } from './serializable';
 /**
  * Contains main decorator for properties of all serializable object
  */
@@ -42,4 +43,5 @@ export declare module SerializerInfo {
      * Defines whether a property must be ignored in deserialization
      */
     function ignoreDeserialize(target: any, propertyKey: string): any;
+    function nested(value: ISerializable): (target: any, propertyKey: string) => any;
 }

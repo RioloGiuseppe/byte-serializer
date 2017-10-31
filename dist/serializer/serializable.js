@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var bitOrder_1 = require("./../enums/bitOrder");
-var numberType_1 = require("./../enums/numberType");
-var propertyType_1 = require("./../enums/propertyType");
+var bitOrder_1 = require("../enums/bitOrder");
+var textEncoding_1 = require("../enums/textEncoding");
+var numberType_1 = require("../enums/numberType");
+var propertyType_1 = require("../enums/propertyType");
 /**
  * Define the structure of the serializable payload and embed the main methods to transform array in to object and vice versa.
  */
@@ -62,7 +63,8 @@ var Serializable = /** @class */ (function () {
     /**
      * Return a buffer that contains all data information stored in properties of the current instance of the object
      */
-    Serializable.prototype.serialize = function () {
+    Serializable.prototype.serialize = function (defs) {
+        defs = defs || {};
         var metas = this.serializeMetadata;
         var msgs = this.messageMetadata;
         var lastMeta = metas[metas.length - 1];
@@ -70,9 +72,14 @@ var Serializable = /** @class */ (function () {
         var buffer = Buffer.allocUnsafe(len);
         for (var _i = 0, metas_1 = metas; _i < metas_1.length; _i++) {
             var meta = metas_1[_i];
+            if (meta.ignoreSerialize)
+                continue;
             if (meta.propertyType === propertyType_1.PropertyType.Number) {
                 if (meta.bitOrder === null || meta.bitOrder === undefined) {
-                    meta.bitOrder = bitOrder_1.BitOrder.BE;
+                    meta.bitOrder = defs.bitOrder || bitOrder_1.BitOrder.BE;
+                }
+                if (meta.numberType === null || meta.numberType === undefined) {
+                    meta.numberType = defs.numberType || numberType_1.NumberType.UInt8;
                 }
                 if (meta.bitOrder === bitOrder_1.BitOrder.BE) {
                     switch (meta.numberType) {
@@ -134,6 +141,9 @@ var Serializable = /** @class */ (function () {
                 }
             }
             if (meta.propertyType === propertyType_1.PropertyType.String) {
+                if (meta.textEncoding === null || meta.textEncoding === undefined) {
+                    meta.textEncoding = defs.textEncoding || textEncoding_1.TextEncoding.ASCII;
+                }
                 var l = 0;
                 if (typeof (meta.length) === "number")
                     l = meta.length;
@@ -152,6 +162,9 @@ var Serializable = /** @class */ (function () {
                 else
                     throw "Invalid length for " + meta.name + " field";
                 (this[meta.name]).copy(buffer, meta.position, 0, l);
+            }
+            if (meta.propertyType === propertyType_1.PropertyType.Object) {
+                (this[meta.name]).serialize(defs).copy(buffer, meta.position, 0, meta.length);
             }
             if (this[meta.name] === undefined || this[meta.name] === null) {
                 throw "Unset variable '" + meta.name + "' is not allowed!";
@@ -177,7 +190,8 @@ var Serializable = /** @class */ (function () {
     /**
      * Set values of properties from a buffer
      */
-    Serializable.prototype.deserialize = function (buffer) {
+    Serializable.prototype.deserialize = function (buffer, defs) {
+        defs = defs || {};
         var metas = this.serializeMetadata;
         var len = buffer.length;
         var end = typeof (this.endInfo) !== "undefined" && this.endInfo.enable !== false ? this[this.endInfo.name] : null;
@@ -197,6 +211,12 @@ var Serializable = /** @class */ (function () {
             if (meta.ignoreDeserialize)
                 continue;
             if (meta.propertyType === propertyType_1.PropertyType.Number) {
+                if (meta.bitOrder === null || meta.bitOrder === undefined) {
+                    meta.bitOrder = defs.bitOrder || bitOrder_1.BitOrder.BE;
+                }
+                if (meta.numberType === null || meta.numberType === undefined) {
+                    meta.numberType = defs.numberType || numberType_1.NumberType.UInt8;
+                }
                 if (meta.bitOrder === bitOrder_1.BitOrder.BE) {
                     switch (meta.numberType) {
                         case numberType_1.NumberType.Int8:
@@ -257,12 +277,20 @@ var Serializable = /** @class */ (function () {
                 }
             }
             if (meta.propertyType === propertyType_1.PropertyType.String) {
+                if (meta.textEncoding === null || meta.textEncoding === undefined) {
+                    meta.textEncoding = defs.textEncoding || textEncoding_1.TextEncoding.ASCII;
+                }
                 var l = typeof (meta.length) !== "undefined" ? meta.length : dyn;
                 this[meta.name] = buffer.toString(meta.textEncoding, meta.position, meta.position + l);
             }
             if (meta.propertyType === propertyType_1.PropertyType.Buffer) {
                 var l = typeof (meta.length) !== "undefined" ? meta.length : dyn;
                 this[meta.name] = Buffer.from(buffer.slice(meta.position, meta.position + l));
+            }
+            if (meta.propertyType === propertyType_1.PropertyType.Object) {
+                //let l = typeof(meta.length) !== "undefined" ? meta.length : dyn;
+                var a = new meta.nestedType();
+                this[meta.name] = a.deserialize(Buffer.from(buffer.slice(meta.position, meta.position + meta.length)), defs);
             }
         }
     };

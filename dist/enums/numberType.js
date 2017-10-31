@@ -13,7 +13,7 @@ var NumberType;
     /**
      * Refear a one byte - 8 bit - signed integer
      */
-    NumberType[NumberType["Int8"] = 1] = "Int8";
+    NumberType[NumberType["Int8"] = -1] = "Int8";
     /**
      * Refear a two byte - 16 bit - unsigned integer
      */
@@ -21,7 +21,7 @@ var NumberType;
     /**
      * Refear a two byte - 16 bit - signed integer
      */
-    NumberType[NumberType["Int16"] = 2] = "Int16";
+    NumberType[NumberType["Int16"] = -2] = "Int16";
     /**
      * Refear a four byte - 32 bit - unsigned integer
      */
@@ -29,7 +29,7 @@ var NumberType;
     /**
      * Refear a four byte - 32 bit - signed integer
      */
-    NumberType[NumberType["Int32"] = 4] = "Int32";
+    NumberType[NumberType["Int32"] = -4] = "Int32";
     /**
      *  Refear a four byte - 32 bit - floating point
      */
@@ -37,6 +37,6 @@ var NumberType;
     /**
      * Refear a four byte - 32 bit - floating point
      */
-    NumberType[NumberType["Double"] = 4] = "Double";
+    NumberType[NumberType["Double"] = -4] = "Double";
 })(NumberType = exports.NumberType || (exports.NumberType = {}));
 //# sourceMappingURL=numberType.js.map

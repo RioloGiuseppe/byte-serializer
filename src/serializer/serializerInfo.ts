@@ -2,7 +2,7 @@ import {BitOrder} from './../enums/bitOrder'
 import {NumberType} from './../enums/numberType'
 import {TextEncoding} from './../enums/textEncoding'
 import {PropertyType} from './../enums/propertyType'
-
+import {ISerializable} from './serializable'
 /**
  * Contains main decorator for properties of all serializable object
  */
@@ -43,7 +43,7 @@ export module SerializerInfo {
     export function numberType(value : NumberType) {
         return function (target : any, propertyKey : string) : any {
             addMeta(target, propertyKey, "numberType", value);
-            addMeta(target, propertyKey, "length", value);
+            addMeta(target, propertyKey, "length", Math.abs(value));
             addMeta(target, propertyKey, "propertyType", PropertyType.Number);            
         }
     }
@@ -66,7 +66,6 @@ export module SerializerInfo {
         return function (target : any, propertyKey : string) : any {
             addMeta(target, propertyKey, "textEncoding", value);
             addMeta(target, propertyKey, "propertyType", PropertyType.String);
-            
         }
     }
 
@@ -82,6 +81,13 @@ export module SerializerInfo {
      */
     export function ignoreDeserialize(target : any, propertyKey : string) : any {
         addMeta(target, propertyKey, "ignoreDeserialize", true);
+    }
+
+    export function nested(value : ISerializable) {
+        return function (target : any, propertyKey : string) : any {
+            addMeta(target, propertyKey, "nestedType", value);
+            addMeta(target, propertyKey, "propertyType", PropertyType.Object);
+        }
     }
     
     /**

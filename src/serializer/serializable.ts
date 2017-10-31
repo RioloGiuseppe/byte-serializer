@@ -1,11 +1,13 @@
 import {SerializerInfo} from './serializerInfo'
-import {BitOrder} from './../enums/bitOrder'
-import {NumberType} from './../enums/numberType'
-import {PropertyType} from './../enums/propertyType'
-import {CommonMetadata} from './../interfaces/commonMetadata'
-import {NumberMetadata} from './../interfaces/numberMetadata'
-import {StringMetadata} from './../interfaces/stringMetadata'
-import {CRC,CRCMetadata} from './../interfaces/crc'
+import {BitOrder} from '../enums/bitOrder'
+import {TextEncoding} from '../enums/textEncoding'
+import {NumberType} from '../enums/numberType'
+import {PropertyType} from '../enums/propertyType'
+import {CommonMetadata} from '../interfaces/commonMetadata'
+import {NumberMetadata} from '../interfaces/numberMetadata'
+import {StringMetadata} from '../interfaces/stringMetadata'
+import {CRC,CRCMetadata} from '../interfaces/crc'
+import {Defaults} from '../interfaces/defaults'
 import {} from 'node'
 
 /**
@@ -62,17 +64,24 @@ export abstract class Serializable {
     /**
      * Return a buffer that contains all data information stored in properties of the current instance of the object
      */
-    public serialize() : Buffer{
+    public serialize(defs?:Defaults) : Buffer{
+        defs = defs || {};
         let metas = this.serializeMetadata;
         let msgs = this.messageMetadata;
         let lastMeta = metas[metas.length-1];
         let len = this.bufferLength;
         let buffer : Buffer = Buffer.allocUnsafe(len);
         for (let meta of metas) {
+            if(meta.ignoreSerialize) continue;
             if (meta.propertyType === PropertyType.Number) {             
-                if ((<NumberMetadata>meta).bitOrder===null||(<NumberMetadata>meta).bitOrder === undefined) {
-                    (<NumberMetadata>meta).bitOrder = BitOrder.BE;
+                if ((<NumberMetadata>meta).bitOrder === null || (<NumberMetadata>meta).bitOrder === undefined) {
+                    (<NumberMetadata>meta).bitOrder = defs.bitOrder || BitOrder.BE;
                 }
+
+                if ((<NumberMetadata>meta).numberType === null || (<NumberMetadata>meta).numberType === undefined) {
+                    (<NumberMetadata>meta).numberType = defs.numberType || NumberType.UInt8;
+                }
+                
                 if((<NumberMetadata>meta).bitOrder === BitOrder.BE) {
                     switch ((<NumberMetadata>meta).numberType) {
                         case NumberType.Int8:buffer.writeInt8((<any>this)[meta.name],meta.position);break;
@@ -100,6 +109,9 @@ export abstract class Serializable {
                 }
             }
             if (meta.propertyType === PropertyType.String) {
+                if ((<StringMetadata>meta).textEncoding === null || (<StringMetadata>meta).textEncoding === undefined) {
+                    (<StringMetadata>meta).textEncoding = defs.textEncoding || TextEncoding.ASCII;
+                }
                 let l = 0;
                 if(typeof(meta.length)==="number")
                     l = meta.length;
@@ -119,6 +131,11 @@ export abstract class Serializable {
                     throw "Invalid length for " + meta.name + " field";
                 (<Buffer>((<any>this)[meta.name])).copy(buffer, meta.position, 0, l);
             }
+
+            if (meta.propertyType === PropertyType.Object) {
+                (<Serializable>((<any>this)[meta.name])).serialize(defs).copy(buffer, meta.position, 0, meta.length);
+            }
+
             if ((<any>this)[meta.name] === undefined || (<any>this)[meta.name] === null) {
                 throw "Unset variable '" + meta.name + "' is not allowed!";
             }
@@ -144,7 +161,8 @@ export abstract class Serializable {
     /**
      * Set values of properties from a buffer
      */
-    public deserialize(buffer: Buffer){
+    public deserialize(buffer: Buffer, defs?:Defaults){
+        defs = defs || {};
         let metas = this.serializeMetadata;
         let len = buffer.length;
         let end  =typeof( (<any>this).endInfo) !=="undefined" && (<any>this).endInfo.enable !== false ? (<any>this)[(<any>this).endInfo.name] : null;
@@ -162,7 +180,14 @@ export abstract class Serializable {
         for(let meta of metas){
             if(meta.ignoreDeserialize)
                 continue;
-            if (meta.propertyType === PropertyType.Number) {           
+            if (meta.propertyType === PropertyType.Number) {     
+                if ((<NumberMetadata>meta).bitOrder === null || (<NumberMetadata>meta).bitOrder === undefined) {
+                    (<NumberMetadata>meta).bitOrder = defs.bitOrder || BitOrder.BE;
+                }
+
+                if ((<NumberMetadata>meta).numberType === null || (<NumberMetadata>meta).numberType === undefined) {
+                    (<NumberMetadata>meta).numberType = defs.numberType || NumberType.UInt8;
+                }
                 if((<NumberMetadata>meta).bitOrder === BitOrder.BE) {
                     switch ((<NumberMetadata>meta).numberType) {
                         case NumberType.Int8:(<any>this)[meta.name] = buffer.readInt8(meta.position);break;
@@ -191,6 +216,9 @@ export abstract class Serializable {
             }
 
             if (meta.propertyType === PropertyType.String) {
+                if ((<StringMetadata>meta).textEncoding === null || (<StringMetadata>meta).textEncoding === undefined) {
+                    (<StringMetadata>meta).textEncoding = defs.textEncoding || TextEncoding.ASCII;
+                }
                 let l = typeof(meta.length) !== "undefined" ? meta.length : dyn;
                 (<any>this)[meta.name] = buffer.toString((<StringMetadata>meta).textEncoding, meta.position, meta.position + l);
             }
@@ -199,6 +227,16 @@ export abstract class Serializable {
                 let l = typeof(meta.length) !== "undefined" ? meta.length : dyn;
                 (<any>this)[meta.name] = Buffer.from(buffer.slice(meta.position, meta.position + l));
             }
+
+            if (meta.propertyType === PropertyType.Object) {
+                //let l = typeof(meta.length) !== "undefined" ? meta.length : dyn;
+                let a = new meta.nestedType();
+                (<any>this)[meta.name] = a.deserialize(Buffer.from(buffer.slice(meta.position, meta.position + meta.length)),defs);
+            }
         }
     }
+}
+
+export interface ISerializable {
+    new ():Serializable
 }
