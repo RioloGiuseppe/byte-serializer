@@ -89,6 +89,24 @@ export module SerializerInfo {
             addMeta(target, propertyKey, "propertyType", PropertyType.Object);
         }
     }
+
+    export function nestedObjectArray(value : ISerializable, len:number) {
+        return function (target : any, propertyKey : string) : any {
+            addMeta(target, propertyKey, "propertyType", PropertyType.Array);
+            addMeta(target, propertyKey, "nestedType", value);
+            addMeta(target, propertyKey, "nestedSize", len);
+        }
+    }
+
+    export function nestedNumberArray(value : NumberType, bitOrder:BitOrder) {
+        return function (target : any, propertyKey : string) : any {
+            addMeta(target, propertyKey, "propertyType", PropertyType.Array);
+            addMeta(target, propertyKey, "nestedType", PropertyType.Number);
+            addMeta(target, propertyKey, "nestedSize", Math.abs(value));
+            addMeta(target, propertyKey, "nestedNumber", value);
+            addMeta(target, propertyKey, "nestedBitOrder", bitOrder);
+        }
+    }
     
     /**
      * @ignore
