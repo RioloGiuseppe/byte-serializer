@@ -44,4 +44,6 @@ export declare module SerializerInfo {
      */
     function ignoreDeserialize(target: any, propertyKey: string): any;
     function nested(value: ISerializable): (target: any, propertyKey: string) => any;
+    function nestedObjectArray(value: ISerializable, len: number): (target: any, propertyKey: string) => any;
+    function nestedNumberArray(value: NumberType, bitOrder: BitOrder): (target: any, propertyKey: string) => any;
 }

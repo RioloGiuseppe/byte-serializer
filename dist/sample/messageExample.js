@@ -70,7 +70,7 @@ var MessageExample = /** @class */ (function (_super) {
     ], MessageExample.prototype, "data", void 0);
     __decorate([
         messageInfo_1.MessageInfo.enableLastChar(true),
-        __metadata("design:type", Object)
+        __metadata("design:type", Number)
     ], MessageExample.prototype, "end", void 0);
     __decorate([
         messageInfo_1.MessageInfo.enableCRC(2, 2, 10),

@@ -21,5 +21,9 @@ var PropertyType;
      * Set the object type for the property
      */
     PropertyType["Object"] = "object";
+    /**
+     * Set the array type for the property
+     */
+    PropertyType["Array"] = "array";
 })(PropertyType = exports.PropertyType || (exports.PropertyType = {}));
 //# sourceMappingURL=propertyType.js.map

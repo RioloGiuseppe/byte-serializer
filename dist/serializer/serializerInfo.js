@@ -88,6 +88,24 @@ var SerializerInfo;
         };
     }
     SerializerInfo.nested = nested;
+    function nestedObjectArray(value, len) {
+        return function (target, propertyKey) {
+            addMeta(target, propertyKey, "propertyType", propertyType_1.PropertyType.Array);
+            addMeta(target, propertyKey, "nestedType", value);
+            addMeta(target, propertyKey, "nestedSize", len);
+        };
+    }
+    SerializerInfo.nestedObjectArray = nestedObjectArray;
+    function nestedNumberArray(value, bitOrder) {
+        return function (target, propertyKey) {
+            addMeta(target, propertyKey, "propertyType", propertyType_1.PropertyType.Array);
+            addMeta(target, propertyKey, "nestedType", propertyType_1.PropertyType.Number);
+            addMeta(target, propertyKey, "nestedSize", Math.abs(value));
+            addMeta(target, propertyKey, "nestedNumber", value);
+            addMeta(target, propertyKey, "nestedBitOrder", bitOrder);
+        };
+    }
+    SerializerInfo.nestedNumberArray = nestedNumberArray;
     /**
      * @ignore
      */
