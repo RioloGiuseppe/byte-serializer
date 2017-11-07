@@ -29,10 +29,12 @@
         "name": "Giuseppe Riolo",
         "email": "riolo.giuseppe@gmail.com"
     },
-    "maintainers": [{
-        "name": "Giuseppe Riolo",
-        "email": "riolo.giuseppe@gmail.com"
-    }],
+    "maintainers": [
+        {
+            "name": "Giuseppe Riolo",
+            "email": "riolo.giuseppe@gmail.com"
+        }
+    ],
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/RioloGiuseppe/byte-serializer/issues"

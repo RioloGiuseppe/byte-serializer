@@ -21,5 +21,10 @@ export enum PropertyType{
     /**
      * Set the object type for the property
      */
-    Object = "object"
+    Object = "object",
+
+    /**
+     * Set the array type for the property
+     */
+    Array = "array"
 }

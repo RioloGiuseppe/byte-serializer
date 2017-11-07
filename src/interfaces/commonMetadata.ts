@@ -31,6 +31,4 @@ export interface CommonMetadata {
      * Define the type of property
      */
     propertyType:string
-
-    nestedType:ISerializable;
 }
