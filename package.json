@@ -7,7 +7,7 @@
     "typings": "./dist/index.d.ts",
     "scripts": {
         "prepublish": "tsc --outDir dist",
-        "doc": "typedoc --options typedoc.json",
+        "doc": "typedoc --module commonjs --target ES5 --out docs src --name \"byte-serializer\" --mode modules --ignoreCompilerErrors --hideGenerator --emitDecoratorMetadata --experimentalDecorators --suppressExcessPropertyErrors --suppressImplicitAnyIndexErrors --excludePrivate --readme readme.md ",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [
