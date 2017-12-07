@@ -1,4 +1,4 @@
-import {BitOrder,CRC,Message,MessageInfo,NumberType,Serializable,SerializerInfo,TextEncoding} from './../index';
+import {BitOrder,NumberType,Serializable,SerializableInfo,TextEncoding} from './../index';
 import {DataExample} from './dataExample';
 import {MessageExample} from './messageExample';
 

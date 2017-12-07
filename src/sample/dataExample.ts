@@ -1,4 +1,4 @@
-import {SerializerInfo} from './../serializer/serializerInfo'
+import {SerializableInfo} from './../serializer/serializableInfo'
 import {BitOrder} from './../enums/bitOrder'
 import {NumberType} from './../enums/numberType'
 import {TextEncoding} from './../enums/textEncoding'
@@ -7,22 +7,22 @@ import {Serializable} from './../serializer/serializable'
  * @ignore
  */
 export class DataExample extends Serializable {
-    @SerializerInfo.position(0)
-    @SerializerInfo.lenght(4)
-    @SerializerInfo.bitOrder(BitOrder.BE)
-    @SerializerInfo.numberType(NumberType.Int32)
+    @SerializableInfo.position(0)
+    @SerializableInfo.lenght(4)
+    @SerializableInfo.bitOrder(BitOrder.BE)
+    @SerializableInfo.numberType(NumberType.Int32)
     public Pippo:number;
 
 
-    @SerializerInfo.position(4)
-    @SerializerInfo.lenght(2)
-    @SerializerInfo.bitOrder(BitOrder.BE)
-    @SerializerInfo.numberType(NumberType.Int16)
+    @SerializableInfo.position(4)
+    @SerializableInfo.lenght(2)
+    @SerializableInfo.bitOrder(BitOrder.BE)
+    @SerializableInfo.numberType(NumberType.Int16)
     public Pluto :number;
 
-    @SerializerInfo.position(6)
-    @SerializerInfo.lenght(10)
-    @SerializerInfo.textEncoding(TextEncoding.ASCII)
+    @SerializableInfo.position(6)
+    @SerializableInfo.lenght(10)
+    @SerializableInfo.textEncoding(TextEncoding.ASCII)
     public Text :string;
 
 }

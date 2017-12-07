@@ -1,6 +1,6 @@
 import {Message} from './../messenger/message'
 import {CRC} from './../interfaces/crc'
-import {SerializerInfo} from './../serializer/serializerInfo'
+import {SerializableInfo} from './../serializer/serializableInfo'
 import {MessageInfo} from './../messenger/messageInfo'
 import {NumberType} from './../enums/numberType'
 import {BitOrder} from './../enums/bitOrder'
@@ -11,24 +11,24 @@ import {} from 'node'
  */
 export class MessageExample extends Message{
  
-    @SerializerInfo.position(0)
-    @SerializerInfo.numberType(NumberType.UInt8)
-    @SerializerInfo.ignoreDeserialize
+    @SerializableInfo.position(0)
+    @SerializableInfo.numberType(NumberType.UInt8)
+    @SerializableInfo.ignoreDeserialize
     public start:number
 
-    @SerializerInfo.position(1) 
-    @SerializerInfo.numberType(NumberType.UInt8)  
-    @SerializerInfo.ignoreDeserialize  
+    @SerializableInfo.position(1) 
+    @SerializableInfo.numberType(NumberType.UInt8)  
+    @SerializableInfo.ignoreDeserialize  
     public length: number;
 
-    @SerializerInfo.position(2)    
-    @SerializerInfo.lenght(4)
-    @SerializerInfo.propertyType(PropertyType.Buffer)
+    @SerializableInfo.position(2)    
+    @SerializableInfo.lenght(4)
+    @SerializableInfo.propertyType(PropertyType.Buffer)
     public head: Buffer;
     
-    @SerializerInfo.position(6)   
+    @SerializableInfo.position(6)   
     //@SerializerInfo.lenght(5)
-    @SerializerInfo.propertyType(PropertyType.Buffer)
+    @SerializableInfo.propertyType(PropertyType.Buffer)
     public data: Buffer
 
     @MessageInfo.enableLastChar(true)

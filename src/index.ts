@@ -1,12 +1,22 @@
+// Enums
 export {BitOrder} from './enums/bitOrder';
 export {NumberType} from './enums/numberType'
 export {TextEncoding} from './enums/textEncoding'
 export {PropertyType} from './enums/propertyType'
-export {CRC} from './interfaces/crc'
+
+// Serialize
 export {Serializable} from './serializer/serializable'
-export {SerializerInfo} from './serializer/serializerInfo'
-export {Message} from './messenger/message'
-export {MessageInfo} from './messenger/MessageInfo'
+export {SerializableInfo} from './serializer/serializableInfo'
+
+// Messages
+//export {Message} from './messenger/message'
+//export {MessageInfo} from './messenger/MessageInfo'
+//export {CRC} from './interfaces/crc'
+//export {CRC,CRCMetadata} from './interfaces/crc'
+
+// Interfaces
 export {CommonMetadata} from './interfaces/commonMetadata'
+export {NestedMetadata} from './interfaces/NestedMetadata'
 export {NumberMetadata} from './interfaces/numberMetadata'
 export {StringMetadata} from './interfaces/stringMetadata'
+export {Defaults} from './interfaces/defaults'

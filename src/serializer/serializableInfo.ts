@@ -6,7 +6,7 @@ import {ISerializable} from './serializable'
 /**
  * Contains main decorator for properties of all serializable object
  */
-export module SerializerInfo {
+export module SerializableInfo {
     
     /**
      * Define the sequential order of bytes
