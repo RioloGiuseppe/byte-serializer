@@ -20,12 +20,7 @@ export interface CommonMetadata {
     /**
      * Defines whether a property must be ignored in serialization
      */
-    ignoreDeserialize: boolean;
-
-    /**
-     * Defines whether a property must be ignored in deserialization
-     */
-    ignoreSerialize: boolean;
+    ignore: boolean;
 
     /**
      * Define the type of property

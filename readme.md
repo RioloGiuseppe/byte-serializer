@@ -63,58 +63,11 @@ export class DataExample extends Serializable {
     public Text :string;
 }
 ```
-#### Define a message
-```ts
-import {Message, MessageInfo, SerializerInfo, CRC, NumberType, PropertyType} from 'byte-serializer'
 
-export class MessageExample extends Message{
- 
-    @SerializerInfo.position(0)
-    @SerializerInfo.numberType(NumberType.UInt8)
-    @SerializerInfo.ingnoreDeserialize
-    public start:number
-
-    @SerializerInfo.position(1) 
-    @SerializerInfo.numberType(NumberType.UInt8)  
-    @SerializerInfo.ingnoreDeserialize  
-    public length: number;
-
-    @SerializerInfo.position(2)    
-    @SerializerInfo.lenght(4)
-    @SerializerInfo.propertyType(PropertyType.Buffer)
-    public head: Buffer;
-    
-    @SerializerInfo.position(6)   
-    @SerializerInfo.lenght(5)
-    @SerializerInfo.propertyType(PropertyType.Buffer)
-    public data: Buffer
-
-    @MessageInfo.enableLastChar(true)
-    public end:number | null;
-   
-    @MessageInfo.enableCRC(2,2,10)
-    public CRC:CRC;
-
-    constructor() {
-        super();
-        this.start = 0x00;
-        this.head = new Buffer([0x01,0x02,0x03,0x04]);
-        this.data = new Buffer([0x05,0x06,0x07,0x08,0x09]);
-        this.end = 0xFF;
-        this.CRC = {
-            compute:function(arr:Array<number>){
-                return Buffer.from([0xFA,0xFB]);
-            }
-        }
-    }
-
-}
-```
 > Use the constructor to initialize data.
 #### Create a message
 ```ts
 let data = new DataExample();
-let message = new MessageExample();
 data.Number1 = 50;
 data.Number2 = 2000;
 data.Text = "A long string"; // More the 10 chars
@@ -123,17 +76,10 @@ data.Text = "A long string"; // More the 10 chars
 #### Serialize a message
 ```ts
 let payload = data.serialize();
-message.data = payload:
-let msg = message.serialize();
 ```
 
 #### Deserialize a message
 ```ts
-let newMessage = new MessageExample();
 let newData = new DataExample();
-newMessage.deserialize(msg);
-newData.deserialize(newMessage.data);
+newData.deserialize(payload);
 ```
-
-### Note
-- Actually dynamic length payload in message is not supported

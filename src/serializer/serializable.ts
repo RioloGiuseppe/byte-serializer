@@ -9,7 +9,8 @@ import {NestedMetadata} from '../interfaces/nestedMetadata'
 import {StringMetadata} from '../interfaces/stringMetadata'
 import {CRC,CRCMetadata} from '../interfaces/crc'
 import {Defaults} from '../interfaces/defaults'
-import {} from 'node'
+import {} from 'node';
+import { Buffer } from 'buffer';
 
 /**
  * Define the structure of the serializable payload and embed the main methods to transform array in to object and vice versa.
@@ -37,55 +38,36 @@ export abstract class Serializable {
     }
 
     /**
-     * Return the additional metadata for current message type configuration
-     */
-    public get messageMetadata():CommonMetadata [] { 
-        if(this._messageMetadata)
-            return this._messageMetadata;
-        let _msg = Object.getPrototypeOf(this)._metaMessage;
-        if(_msg)
-            this._messageMetadata=  Object.keys(_msg).map(o => Object.assign({
-                    name: o
-            }, _msg[o]));
-        else 
-            this._messageMetadata = [];
-        return this._messageMetadata;
-    }
-
-    /**
      * Return the length of entire buffer
      */
     public get bufferLength(): number{
         let metas = this.serializeMetadata;
         let that = <any>this;
-        return metas.filter(o=>!o.ignoreSerialize).reduce(function(a,b){
+        return metas.filter(o=>!o.ignore).reduce(function(a,b){
             if(typeof(b.length)==="number") return a + b.length;
             else if(typeof(that[b.name].length)==="number") return a+ that[b.name].length;
-            else throw "Invalid length for " + b.name + " field";
+            else throw new Error("Invalid length for " + b.name + " field");
         },0);
     }
 
     /**
      * Return a buffer that contains all data information stored in properties of the current instance of the object
      */
-    public serialize(defs?:Defaults) : Buffer {
-        defs = defs || {};
+    public serialize(defs:Defaults, err:(e:Error)=>void) : Buffer {
+        defs = defs || {
+            bitOrder: BitOrder.BE,
+            numberType:NumberType.Int32,
+            textEncoding: TextEncoding.ASCII
+        };
         let metas = this.serializeMetadata;
-        let msgs = this.messageMetadata;
         let lastMeta = metas[metas.length-1];
         let len = this.bufferLength;
         let buffer : Buffer = Buffer.allocUnsafe(len);
         for (let meta of metas) {
-            if(meta.ignoreSerialize) continue;
+            if(meta.ignore) continue;
             if (meta.propertyType === PropertyType.Number) {             
-                if ((<NumberMetadata>meta).bitOrder === null || (<NumberMetadata>meta).bitOrder === undefined) {
-                    (<NumberMetadata>meta).bitOrder = defs.bitOrder || BitOrder.BE;
-                }
-
-                if ((<NumberMetadata>meta).numberType === null || (<NumberMetadata>meta).numberType === undefined) {
-                    (<NumberMetadata>meta).numberType = defs.numberType || NumberType.UInt8;
-                }
-                
+                (<NumberMetadata>meta).bitOrder = (<NumberMetadata>meta).bitOrder || defs.bitOrder || BitOrder.BE;
+                (<NumberMetadata>meta).numberType = (<NumberMetadata>meta).numberType || defs.numberType || NumberType.UInt8;
                 if((<NumberMetadata>meta).bitOrder === BitOrder.BE) {
                     switch ((<NumberMetadata>meta).numberType) {
                         case NumberType.Int8:buffer.writeInt8((<any>this)[meta.name],meta.position);break;
@@ -96,7 +78,7 @@ export abstract class Serializable {
                         case NumberType.UInt32:buffer.writeUInt32BE((<any>this)[meta.name],meta.position);break;
                         case NumberType.Float:buffer.writeFloatBE((<any>this)[meta.name],meta.position);break;
                         case NumberType.Double:buffer.writeDoubleBE((<any>this)[meta.name],meta.position);break;                        
-                        default: throw "Unknown number type.";
+                        default: throw new Error("Unknown number type.");
                     }
                 } else {
                     switch ((<NumberMetadata>meta).numberType) {
@@ -108,50 +90,38 @@ export abstract class Serializable {
                         case NumberType.UInt32:buffer.writeUInt32LE((<any>this)[meta.name],meta.position);break;
                         case NumberType.Float:buffer.writeFloatLE((<any>this)[meta.name],meta.position);break;
                         case NumberType.Double:buffer.writeDoubleLE((<any>this)[meta.name],meta.position);break;
-                        default: throw "Unknown number type.";
+                        default: throw new Error("Unknown number type.");
                     }
                 }
             }
             if (meta.propertyType === PropertyType.String) {
-                if ((<StringMetadata>meta).textEncoding === null || (<StringMetadata>meta).textEncoding === undefined) {
-                    (<StringMetadata>meta).textEncoding = defs.textEncoding || TextEncoding.ASCII;
-                }
-                let l = 0;
-                if(typeof(meta.length)==="number")
-                    l = meta.length;
-                else if(typeof((<any>this)[meta.name].length)==="number")
-                    l = (<any>this)[meta.name].length;
-                else
-                    throw "Invalid length for " + meta.name + " field";
-                buffer.write((<any>this)[meta.name], meta.position, l, (<StringMetadata>meta).textEncoding);
+                if(typeof(meta.position)!=="number") throw new Error("Invalid position for " + meta.name + " field");
+                (<StringMetadata>meta).textEncoding = (<StringMetadata>meta).textEncoding || defs.textEncoding || TextEncoding.ASCII;
+                let _len = new Buffer((<any>this)[meta.name],(<StringMetadata>meta).textEncoding).length;
+                buffer.write((<any>this)[meta.name], meta.position, meta.length || _len, (<StringMetadata>meta).textEncoding);
             }
             if (meta.propertyType === PropertyType.Buffer) {
-                let l = 0;
-                if(typeof(meta.length)==="number")
-                    l = meta.length;
-                else if(typeof((<any>this)[meta.name].length)==="number")
-                    l = (<any>this)[meta.name].length;
-                else
-                    throw "Invalid length for " + meta.name + " field";
-                (<Buffer>((<any>this)[meta.name])).copy(buffer, meta.position, 0, l);
+                if(typeof(meta.position)!=="number") throw new Error("Invalid position for " + meta.name + " field");
+                (<Buffer>((<any>this)[meta.name])).copy(buffer, meta.position, 0, meta.length || (<Buffer>((<any>this)[meta.name])).length);
             }
-
             if (meta.propertyType === PropertyType.Object) {
-                (<Serializable>((<any>this)[meta.name])).serialize(defs).copy(buffer, meta.position, 0, meta.length);
+                if(typeof(meta.position)!=="number") throw new Error("Invalid position for " + meta.name + " field");
+                (<Serializable>((<any>this)[meta.name])).serialize(defs, err).copy(buffer, meta.position, 0, meta.length);
             }
-
             if (meta.propertyType === PropertyType.Array) {
-                if((<any>(<NestedMetadata>meta).nestedType).prototype instanceof Serializable){
+                if(typeof(meta.position)!=="number") throw new Error("Invalid position for " + meta.name + " field");
+                if(typeof(<any>(<NestedMetadata>meta).nestedType)!=="number") throw new Error("Invalid length for " + meta.name + " field");
+                if(typeof(<any>(<NestedMetadata>meta).nestedType)!=="number" || typeof(<any>(<NestedMetadata>meta).nestedType)!=="object") throw new Error("Invalid type for " + meta.name + " field");
+                if((<any>(<NestedMetadata>meta).nestedType).prototype instanceof Serializable) {
                     let a = <Array<Serializable>>((<any>this)[meta.name]);
                     let stPos = meta.position;
                     let _len = (<NestedMetadata>meta).nestedSize;
                     for(let item of a){
-                        item.serialize(defs).copy(buffer, stPos, 0, _len);
+                        item.serialize(defs, err).copy(buffer, stPos, 0, _len);
                         stPos += _len;
                     }
                 }
-
-                if( (<NestedMetadata>meta).nestedType === PropertyType.Number){
+                if((<NestedMetadata>meta).nestedType === PropertyType.Number){
                     let a = <Array<Serializable|number>>((<any>this)[meta.name]);
                     let f:(value:number,offset:number,noAssert?:boolean)=>number;
                     if((<NestedMetadata>meta).nestedBitOrder === BitOrder.BE) {
@@ -164,7 +134,7 @@ export abstract class Serializable {
                             case NumberType.UInt32 : f = buffer.writeUInt32BE;break;
                             case NumberType.Float : f = buffer.writeFloatBE;break;
                             case NumberType.Double : f = buffer.writeDoubleBE;break;                        
-                            default: throw "Unknown number type.";
+                            default: throw new Error("Unknown number type.");
                         }
                     } else {
                         switch ((<NestedMetadata>meta).nestedNumber) {
@@ -176,7 +146,7 @@ export abstract class Serializable {
                             case NumberType.UInt32: f = buffer.writeUInt32LE;break;
                             case NumberType.Float: f = buffer.writeFloatLE;break;
                             case NumberType.Double: f = buffer.writeDoubleLE;break;
-                            default: throw "Unknown number type.";
+                            default: throw new Error("Unknown number type.");
                         }
                     }
                     let stPos = meta.position;
@@ -187,25 +157,9 @@ export abstract class Serializable {
                     }
                 }
             }
-
             if ((<any>this)[meta.name] === undefined || (<any>this)[meta.name] === null) {
-                throw "Unset variable '" + meta.name + "' is not allowed!";
+                throw new Error("Unset variable '" + meta.name + "' is not allowed!");
             }
-        }
-        if(typeof((<any>this).crcInfo)!=="undefined"){
-            let thisAny = <any>this;
-            let l = 0;
-            if(typeof(lastMeta.length)==="number")
-                l = lastMeta.length;
-            else if(typeof((<any>this)[lastMeta.name].length)==="number")
-                l = (<any>this)[lastMeta.name].length;
-            else
-                throw "Invalid length for " + lastMeta.name + " field";
-            var crcBuff =Buffer.from((<CRC>((<any>this)[thisAny.crcInfo.name])).compute(<Array<number>><any>buffer.slice(thisAny.crcInfo.startByte,thisAny.crcInfo.stopByte)));
-            crcBuff.copy(buffer,lastMeta.position+l, 0, thisAny.crcInfo.length);
-        }
-        if(typeof((<any>this).endInfo)!=="undefined"){
-            buffer[buffer.length-1] = (<any>this)[(<any>this).endInfo.name];
         }
         return buffer;
     }
@@ -213,34 +167,18 @@ export abstract class Serializable {
     /**
      * Set values of properties from a buffer
      */
-    public deserialize(buffer: Buffer, defs?:Defaults){
+    public deserialize(buffer: Buffer, defs?:Defaults) : Serializable {
         defs = defs || {};
         let metas = this.serializeMetadata;
         let len = buffer.length;
-        let end  =typeof( (<any>this).endInfo) !=="undefined" && (<any>this).endInfo.enable !== false ? (<any>this)[(<any>this).endInfo.name] : null;
-        if (end !== null && typeof(end) === "number" && buffer[buffer.length-1] !== end)
-           throw "unexpected end of frame"
-        ////////////////////////
-        let dyn = len - (typeof((<any>this).crcInfo) !== "undefined" && typeof((<any>this).crcInfo.length) === "number" ? (<any>this).crcInfo.length : 0) - (end ? 1 : 0);
-        dyn -= metas.filter(o=>!o.ignoreDeserialize && typeof(o.length) ==="number").reduce((a, b)=>a+b.length, 0)
-        if(typeof((<any>this).crcInfo)!=="undefined"){
-            let thisAny = <any>this;
-            var crcBuff =(<CRC>((<any>this)[thisAny.crcInfo.name])).compute(<Array<number>><any>buffer.slice(thisAny.crcInfo.startByte,thisAny.crcInfo.stopByte));
-            let crcread= buffer.slice(len - (<CRCMetadata>thisAny.crcInfo).length - (end ? 1 : 0), len - (end ? 1 : 0));
-            if(crcBuff.compare(crcread)!==0)
-                throw "CRC not match";
-        }
+        let lastWrite:number = 0;
         for(let meta of metas){
-            if(meta.ignoreDeserialize)
-                continue;
+            if(meta.ignore) continue;
             if (meta.propertyType === PropertyType.Number) {     
-                if ((<NumberMetadata>meta).bitOrder === null || (<NumberMetadata>meta).bitOrder === undefined) {
-                    (<NumberMetadata>meta).bitOrder = defs.bitOrder || BitOrder.BE;
-                }
-
-                if ((<NumberMetadata>meta).numberType === null || (<NumberMetadata>meta).numberType === undefined) {
-                    (<NumberMetadata>meta).numberType = defs.numberType || NumberType.UInt8;
-                }
+                if(typeof(meta.length)!=="number") throw new Error("Invalid length for " + meta.name + " field");
+                if(typeof(meta.position)!=="number") throw new Error("Invalid position for " + meta.name + " field");
+                (<NumberMetadata>meta).bitOrder = (<NumberMetadata>meta).bitOrder || defs.bitOrder;
+                (<NumberMetadata>meta).numberType = (<NumberMetadata>meta).numberType || defs.numberType;
                 if((<NumberMetadata>meta).bitOrder === BitOrder.BE) {
                     switch ((<NumberMetadata>meta).numberType) {
                         case NumberType.Int8:(<any>this)[meta.name] = buffer.readInt8(meta.position);break;
@@ -251,7 +189,7 @@ export abstract class Serializable {
                         case NumberType.UInt32:(<any>this)[meta.name] = buffer.readUInt32BE(meta.position);break;
                         case NumberType.Float:(<any>this)[meta.name] = buffer.readFloatBE(meta.position);break;
                         case NumberType.Double:(<any>this)[meta.name] = buffer.readDoubleBE(meta.position);break;
-                        default: throw "Unknown number type.";
+                        default: throw new Error("Unknown number type.");
                     }
                 } else {
                     switch ((<NumberMetadata>meta).numberType) {
@@ -263,44 +201,49 @@ export abstract class Serializable {
                         case NumberType.UInt32:(<any>this)[meta.name] = buffer.readUInt32LE(meta.position);break;
                         case NumberType.Float:(<any>this)[meta.name] = buffer.readFloatLE(meta.position);break;
                         case NumberType.Double:(<any>this)[meta.name] = buffer.readDoubleLE(meta.position);break;
-                        default: throw "Unknown number type.";
+                        default: throw new Error("Unknown number type.");
                     }
                 }
+                lastWrite += (meta.position + meta.length);
             }
 
             if (meta.propertyType === PropertyType.String) {
-                if ((<StringMetadata>meta).textEncoding === null || (<StringMetadata>meta).textEncoding === undefined) {
-                    (<StringMetadata>meta).textEncoding = defs.textEncoding || TextEncoding.ASCII;
-                }
-                let l = typeof(meta.length) !== "undefined" ? meta.length : dyn;
+                if(typeof(meta.position)!=="number") throw new Error("Invalid position for " + meta.name + " field");
+                (<StringMetadata>meta).textEncoding = (<StringMetadata>meta).textEncoding || defs.textEncoding;
+                let l = typeof(meta.length) !== "undefined" ? meta.length : (len - lastWrite);
                 (<any>this)[meta.name] = buffer.toString((<StringMetadata>meta).textEncoding, meta.position, meta.position + l);
+                lastWrite += (meta.position + meta.length);
             }
 
             if (meta.propertyType === PropertyType.Buffer) {
-                let l = typeof(meta.length) !== "undefined" ? meta.length : dyn;
+                if(typeof(meta.position)!=="number") throw new Error("Invalid position for " + meta.name + " field");
+                let l = typeof(meta.length) !== "undefined" ? meta.length : (len - lastWrite);
                 (<any>this)[meta.name] = Buffer.from(buffer.slice(meta.position, meta.position + l));
+                lastWrite += (meta.position + meta.length);
             }
 
             if (meta.propertyType === PropertyType.Object) {
-                //let l = typeof(meta.length) !== "undefined" ? meta.length : dyn;
+                if(typeof(meta.position)!=="number") throw new Error("Invalid position for " + meta.name + " field");
                 let a = new (<ISerializable>(<NestedMetadata>meta).nestedType)();
                 (<any>this)[meta.name] = a.deserialize(Buffer.from(buffer.slice(meta.position, meta.position + meta.length)),defs);
             }
 
             if (meta.propertyType === PropertyType.Array) {
+                if(typeof(meta.position)!=="number") throw new Error("Invalid position for " + meta.name + " field");
                 if((<any>(<NestedMetadata>meta).nestedType).prototype instanceof Serializable){
-                    let a = new Array<Serializable>()
-                    let reps = meta.length/(<NestedMetadata>meta).nestedSize;
+                    let array = new Array<Serializable>();
+                    let _len = meta.length || (len - lastWrite);
+                    let items = _len/(<NestedMetadata>meta).nestedSize;
                     let start = meta.position;
-                    for(let i =0;i<reps;i++) {
+                    for(let i =0;i<items;i++) {
                         let o = new (<ISerializable>(<NestedMetadata>meta).nestedType)();
                         o.deserialize(Buffer.from(buffer.slice(start,start+(<NestedMetadata>meta).nestedSize)),defs);
-                        a.push(o);
+                        array.push(o);
                     }
-                    (<any>this)[meta.name] = a;
+                    (<any>this)[meta.name] = array;
                 }
                 if( (<NestedMetadata>meta).nestedType === PropertyType.Number){
-                    let a = new Array<number>();
+                    if(typeof(meta.position)!=="number") throw new Error("Invalid position for " + meta.name + " field");
                     let f:(offset:number,noAssert?:boolean)=>number;
                     if((<NestedMetadata>meta).nestedBitOrder === BitOrder.BE) {
                         switch ((<NestedMetadata>meta).nestedNumber) {
@@ -312,7 +255,7 @@ export abstract class Serializable {
                             case NumberType.UInt32 : f = buffer.readUInt32BE;break;
                             case NumberType.Float : f = buffer.readFloatBE;break;
                             case NumberType.Double : f = buffer.readDoubleBE;break;                        
-                            default: throw "Unknown number type.";
+                            default: throw new Error("Unknown number type.");
                         }
                     } else {
                         switch ((<NestedMetadata>meta).nestedNumber) {
@@ -324,19 +267,22 @@ export abstract class Serializable {
                             case NumberType.UInt32: f = buffer.readUInt32LE;break;
                             case NumberType.Float: f = buffer.readFloatLE;break;
                             case NumberType.Double: f = buffer.readDoubleLE;break;
-                            default: throw "Unknown number type.";
+                            default: throw new Error("Unknown number type.");
                         }
                     }
-                    let reps = meta.length/(<NestedMetadata>meta).nestedSize;
+                    let array = new Array<number>();     
+                    let _len = meta.length || (len - lastWrite);       
+                    let items = _len/(<NestedMetadata>meta).nestedSize;
                     let start = meta.position;
-                    for(let i =0;i<reps;i++) {
-                        a.push(f.call(buffer, start));
+                    for(let i =0;i<items;i++) {
+                        array.push(f.call(buffer, start));
                         start += (<NestedMetadata>meta).nestedSize
                     }
-                    (<any>this)[meta.name] = a;
+                    (<any>this)[meta.name] = array;
                 }
             }
         }
+        return this;
     }
 }
 
