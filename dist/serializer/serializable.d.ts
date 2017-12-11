@@ -13,21 +13,17 @@ export declare abstract class Serializable {
     */
     readonly serializeMetadata: CommonMetadata[];
     /**
-     * Return the additional metadata for current message type configuration
-     */
-    readonly messageMetadata: CommonMetadata[];
-    /**
      * Return the length of entire buffer
      */
     readonly bufferLength: number;
     /**
      * Return a buffer that contains all data information stored in properties of the current instance of the object
      */
-    serialize(defs?: Defaults): Buffer;
+    serialize(defs?: Defaults, err?: (e: Error) => void): Buffer;
     /**
      * Set values of properties from a buffer
      */
-    deserialize(buffer: Buffer, defs?: Defaults): void;
+    deserialize(buffer: Buffer, defs?: Defaults, err?: (e: Error) => void): Serializable;
 }
 export interface ISerializable {
     new (): Serializable;

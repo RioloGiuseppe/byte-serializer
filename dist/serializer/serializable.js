@@ -4,6 +4,7 @@ var bitOrder_1 = require("../enums/bitOrder");
 var textEncoding_1 = require("../enums/textEncoding");
 var numberType_1 = require("../enums/numberType");
 var propertyType_1 = require("../enums/propertyType");
+var buffer_1 = require("buffer");
 /**
  * Define the structure of the serializable payload and embed the main methods to transform array in to object and vice versa.
  */
@@ -28,25 +29,6 @@ var Serializable = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Serializable.prototype, "messageMetadata", {
-        /**
-         * Return the additional metadata for current message type configuration
-         */
-        get: function () {
-            if (this._messageMetadata)
-                return this._messageMetadata;
-            var _msg = Object.getPrototypeOf(this)._metaMessage;
-            if (_msg)
-                this._messageMetadata = Object.keys(_msg).map(function (o) { return Object.assign({
-                    name: o
-                }, _msg[o]); });
-            else
-                this._messageMetadata = [];
-            return this._messageMetadata;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(Serializable.prototype, "bufferLength", {
         /**
          * Return the length of entire buffer
@@ -54,13 +36,13 @@ var Serializable = /** @class */ (function () {
         get: function () {
             var metas = this.serializeMetadata;
             var that = this;
-            return metas.filter(function (o) { return !o.ignoreSerialize; }).reduce(function (a, b) {
+            return metas.filter(function (o) { return !o.ignore; }).reduce(function (a, b) {
                 if (typeof (b.length) === "number")
                     return a + b.length;
                 else if (typeof (that[b.name].length) === "number")
                     return a + that[b.name].length;
                 else
-                    throw "Invalid length for " + b.name + " field";
+                    throw new Error("Invalid length for " + b.name + " field");
             }, 0);
         },
         enumerable: true,
@@ -69,399 +51,397 @@ var Serializable = /** @class */ (function () {
     /**
      * Return a buffer that contains all data information stored in properties of the current instance of the object
      */
-    Serializable.prototype.serialize = function (defs) {
-        defs = defs || {};
-        var metas = this.serializeMetadata;
-        var msgs = this.messageMetadata;
-        var lastMeta = metas[metas.length - 1];
-        var len = this.bufferLength;
-        var buffer = Buffer.allocUnsafe(len);
-        for (var _i = 0, metas_1 = metas; _i < metas_1.length; _i++) {
-            var meta = metas_1[_i];
-            if (meta.ignoreSerialize)
-                continue;
-            if (meta.propertyType === propertyType_1.PropertyType.Number) {
-                if (meta.bitOrder === null || meta.bitOrder === undefined) {
-                    meta.bitOrder = defs.bitOrder || bitOrder_1.BitOrder.BE;
-                }
-                if (meta.numberType === null || meta.numberType === undefined) {
-                    meta.numberType = defs.numberType || numberType_1.NumberType.UInt8;
-                }
-                if (meta.bitOrder === bitOrder_1.BitOrder.BE) {
-                    switch (meta.numberType) {
-                        case numberType_1.NumberType.Int8:
-                            buffer.writeInt8(this[meta.name], meta.position);
-                            break;
-                        case numberType_1.NumberType.UInt8:
-                            buffer.writeUInt8(this[meta.name], meta.position);
-                            break;
-                        case numberType_1.NumberType.Int16:
-                            buffer.writeInt16BE(this[meta.name], meta.position);
-                            break;
-                        case numberType_1.NumberType.UInt16:
-                            buffer.writeUInt16BE(this[meta.name], meta.position);
-                            break;
-                        case numberType_1.NumberType.Int32:
-                            buffer.writeInt32BE(this[meta.name], meta.position);
-                            break;
-                        case numberType_1.NumberType.UInt32:
-                            buffer.writeUInt32BE(this[meta.name], meta.position);
-                            break;
-                        case numberType_1.NumberType.Float:
-                            buffer.writeFloatBE(this[meta.name], meta.position);
-                            break;
-                        case numberType_1.NumberType.Double:
-                            buffer.writeDoubleBE(this[meta.name], meta.position);
-                            break;
-                        default: throw "Unknown number type.";
-                    }
-                }
-                else {
-                    switch (meta.numberType) {
-                        case numberType_1.NumberType.Int8:
-                            buffer.writeInt8(this[meta.name], meta.position);
-                            break;
-                        case numberType_1.NumberType.UInt8:
-                            buffer.writeUInt8(this[meta.name], meta.position);
-                            break;
-                        case numberType_1.NumberType.Int16:
-                            buffer.writeInt16LE(this[meta.name], meta.position);
-                            break;
-                        case numberType_1.NumberType.UInt16:
-                            buffer.writeUInt16LE(this[meta.name], meta.position);
-                            break;
-                        case numberType_1.NumberType.Int32:
-                            buffer.writeInt32LE(this[meta.name], meta.position);
-                            break;
-                        case numberType_1.NumberType.UInt32:
-                            buffer.writeUInt32LE(this[meta.name], meta.position);
-                            break;
-                        case numberType_1.NumberType.Float:
-                            buffer.writeFloatLE(this[meta.name], meta.position);
-                            break;
-                        case numberType_1.NumberType.Double:
-                            buffer.writeDoubleLE(this[meta.name], meta.position);
-                            break;
-                        default: throw "Unknown number type.";
-                    }
-                }
-            }
-            if (meta.propertyType === propertyType_1.PropertyType.String) {
-                if (meta.textEncoding === null || meta.textEncoding === undefined) {
-                    meta.textEncoding = defs.textEncoding || textEncoding_1.TextEncoding.ASCII;
-                }
-                var l = 0;
-                if (typeof (meta.length) === "number")
-                    l = meta.length;
-                else if (typeof (this[meta.name].length) === "number")
-                    l = this[meta.name].length;
-                else
-                    throw "Invalid length for " + meta.name + " field";
-                buffer.write(this[meta.name], meta.position, l, meta.textEncoding);
-            }
-            if (meta.propertyType === propertyType_1.PropertyType.Buffer) {
-                var l = 0;
-                if (typeof (meta.length) === "number")
-                    l = meta.length;
-                else if (typeof (this[meta.name].length) === "number")
-                    l = this[meta.name].length;
-                else
-                    throw "Invalid length for " + meta.name + " field";
-                (this[meta.name]).copy(buffer, meta.position, 0, l);
-            }
-            if (meta.propertyType === propertyType_1.PropertyType.Object) {
-                (this[meta.name]).serialize(defs).copy(buffer, meta.position, 0, meta.length);
-            }
-            if (meta.propertyType === propertyType_1.PropertyType.Array) {
-                if (meta.nestedType.prototype instanceof Serializable) {
-                    var a = (this[meta.name]);
-                    var stPos = meta.position;
-                    var _len = meta.nestedSize;
-                    for (var _a = 0, a_1 = a; _a < a_1.length; _a++) {
-                        var item = a_1[_a];
-                        item.serialize(defs).copy(buffer, stPos, 0, _len);
-                        stPos += _len;
-                    }
-                }
-                if (meta.nestedType === propertyType_1.PropertyType.Number) {
-                    var a = (this[meta.name]);
-                    var f = void 0;
-                    if (meta.nestedBitOrder === bitOrder_1.BitOrder.BE) {
-                        switch (meta.nestedNumber) {
+    Serializable.prototype.serialize = function (defs, err) {
+        try {
+            defs = defs || {
+                bitOrder: bitOrder_1.BitOrder.BE,
+                numberType: numberType_1.NumberType.Int32,
+                textEncoding: textEncoding_1.TextEncoding.ASCII
+            };
+            var metas = this.serializeMetadata;
+            var lastMeta = metas[metas.length - 1];
+            var len = this.bufferLength;
+            var buffer = buffer_1.Buffer.allocUnsafe(len);
+            for (var _i = 0, metas_1 = metas; _i < metas_1.length; _i++) {
+                var meta = metas_1[_i];
+                if (meta.ignore)
+                    continue;
+                if (meta.propertyType === propertyType_1.PropertyType.Number) {
+                    meta.bitOrder = meta.bitOrder || defs.bitOrder || bitOrder_1.BitOrder.BE;
+                    meta.numberType = meta.numberType || defs.numberType || numberType_1.NumberType.UInt8;
+                    if (meta.bitOrder === bitOrder_1.BitOrder.BE) {
+                        switch (meta.numberType) {
                             case numberType_1.NumberType.Int8:
-                                f = buffer.writeInt8;
+                                buffer.writeInt8(this[meta.name], meta.position);
                                 break;
                             case numberType_1.NumberType.UInt8:
-                                f = buffer.writeUInt8;
+                                buffer.writeUInt8(this[meta.name], meta.position);
                                 break;
                             case numberType_1.NumberType.Int16:
-                                f = buffer.writeInt16BE;
+                                buffer.writeInt16BE(this[meta.name], meta.position);
                                 break;
                             case numberType_1.NumberType.UInt16:
-                                f = buffer.writeUInt16BE;
+                                buffer.writeUInt16BE(this[meta.name], meta.position);
                                 break;
                             case numberType_1.NumberType.Int32:
-                                f = buffer.writeInt32BE;
+                                buffer.writeInt32BE(this[meta.name], meta.position);
                                 break;
                             case numberType_1.NumberType.UInt32:
-                                f = buffer.writeUInt32BE;
+                                buffer.writeUInt32BE(this[meta.name], meta.position);
                                 break;
                             case numberType_1.NumberType.Float:
-                                f = buffer.writeFloatBE;
+                                buffer.writeFloatBE(this[meta.name], meta.position);
                                 break;
                             case numberType_1.NumberType.Double:
-                                f = buffer.writeDoubleBE;
+                                buffer.writeDoubleBE(this[meta.name], meta.position);
                                 break;
-                            default: throw "Unknown number type.";
+                            default: throw new Error("Unknown number type.");
                         }
                     }
                     else {
-                        switch (meta.nestedNumber) {
+                        switch (meta.numberType) {
                             case numberType_1.NumberType.Int8:
-                                f = buffer.writeInt8;
+                                buffer.writeInt8(this[meta.name], meta.position);
                                 break;
                             case numberType_1.NumberType.UInt8:
-                                f = buffer.writeUInt8;
+                                buffer.writeUInt8(this[meta.name], meta.position);
                                 break;
                             case numberType_1.NumberType.Int16:
-                                f = buffer.writeInt16LE;
+                                buffer.writeInt16LE(this[meta.name], meta.position);
                                 break;
                             case numberType_1.NumberType.UInt16:
-                                f = buffer.writeUInt16LE;
+                                buffer.writeUInt16LE(this[meta.name], meta.position);
                                 break;
                             case numberType_1.NumberType.Int32:
-                                f = buffer.writeInt32LE;
+                                buffer.writeInt32LE(this[meta.name], meta.position);
                                 break;
                             case numberType_1.NumberType.UInt32:
-                                f = buffer.writeUInt32LE;
+                                buffer.writeUInt32LE(this[meta.name], meta.position);
                                 break;
                             case numberType_1.NumberType.Float:
-                                f = buffer.writeFloatLE;
+                                buffer.writeFloatLE(this[meta.name], meta.position);
                                 break;
                             case numberType_1.NumberType.Double:
-                                f = buffer.writeDoubleLE;
+                                buffer.writeDoubleLE(this[meta.name], meta.position);
                                 break;
-                            default: throw "Unknown number type.";
+                            default: throw new Error("Unknown number type.");
                         }
                     }
-                    var stPos = meta.position;
-                    var _len = meta.nestedSize;
-                    for (var _b = 0, a_2 = a; _b < a_2.length; _b++) {
-                        var item = a_2[_b];
-                        f(item, _len);
-                        stPos += _len;
+                }
+                if (meta.propertyType === propertyType_1.PropertyType.String) {
+                    if (typeof (meta.position) !== "number")
+                        throw new Error("Invalid position for " + meta.name + " field");
+                    meta.textEncoding = meta.textEncoding || defs.textEncoding || textEncoding_1.TextEncoding.ASCII;
+                    var _len = new buffer_1.Buffer(this[meta.name], meta.textEncoding).length;
+                    buffer.write(this[meta.name], meta.position, meta.length || _len, meta.textEncoding);
+                }
+                if (meta.propertyType === propertyType_1.PropertyType.Buffer) {
+                    if (typeof (meta.position) !== "number")
+                        throw new Error("Invalid position for " + meta.name + " field");
+                    (this[meta.name]).copy(buffer, meta.position, 0, meta.length || (this[meta.name]).length);
+                }
+                if (meta.propertyType === propertyType_1.PropertyType.Object) {
+                    if (typeof (meta.position) !== "number")
+                        throw new Error("Invalid position for " + meta.name + " field");
+                    (this[meta.name]).serialize(defs, err).copy(buffer, meta.position, 0, meta.length);
+                }
+                if (meta.propertyType === propertyType_1.PropertyType.Array) {
+                    if (typeof (meta.position) !== "number")
+                        throw new Error("Invalid position for " + meta.name + " field");
+                    if (typeof meta.nestedType !== "number")
+                        throw new Error("Invalid length for " + meta.name + " field");
+                    if (typeof meta.nestedType !== "number" || typeof meta.nestedType !== "object")
+                        throw new Error("Invalid type for " + meta.name + " field");
+                    if (meta.nestedType.prototype instanceof Serializable) {
+                        var a = (this[meta.name]);
+                        var stPos = meta.position;
+                        var _len = meta.nestedSize;
+                        for (var _a = 0, a_1 = a; _a < a_1.length; _a++) {
+                            var item = a_1[_a];
+                            item.serialize(defs, err).copy(buffer, stPos, 0, _len);
+                            stPos += _len;
+                        }
+                    }
+                    if (meta.nestedType === propertyType_1.PropertyType.Number) {
+                        var a = (this[meta.name]);
+                        var f = void 0;
+                        if (meta.nestedBitOrder === bitOrder_1.BitOrder.BE) {
+                            switch (meta.nestedNumber) {
+                                case numberType_1.NumberType.Int8:
+                                    f = buffer.writeInt8;
+                                    break;
+                                case numberType_1.NumberType.UInt8:
+                                    f = buffer.writeUInt8;
+                                    break;
+                                case numberType_1.NumberType.Int16:
+                                    f = buffer.writeInt16BE;
+                                    break;
+                                case numberType_1.NumberType.UInt16:
+                                    f = buffer.writeUInt16BE;
+                                    break;
+                                case numberType_1.NumberType.Int32:
+                                    f = buffer.writeInt32BE;
+                                    break;
+                                case numberType_1.NumberType.UInt32:
+                                    f = buffer.writeUInt32BE;
+                                    break;
+                                case numberType_1.NumberType.Float:
+                                    f = buffer.writeFloatBE;
+                                    break;
+                                case numberType_1.NumberType.Double:
+                                    f = buffer.writeDoubleBE;
+                                    break;
+                                default: throw new Error("Unknown number type.");
+                            }
+                        }
+                        else {
+                            switch (meta.nestedNumber) {
+                                case numberType_1.NumberType.Int8:
+                                    f = buffer.writeInt8;
+                                    break;
+                                case numberType_1.NumberType.UInt8:
+                                    f = buffer.writeUInt8;
+                                    break;
+                                case numberType_1.NumberType.Int16:
+                                    f = buffer.writeInt16LE;
+                                    break;
+                                case numberType_1.NumberType.UInt16:
+                                    f = buffer.writeUInt16LE;
+                                    break;
+                                case numberType_1.NumberType.Int32:
+                                    f = buffer.writeInt32LE;
+                                    break;
+                                case numberType_1.NumberType.UInt32:
+                                    f = buffer.writeUInt32LE;
+                                    break;
+                                case numberType_1.NumberType.Float:
+                                    f = buffer.writeFloatLE;
+                                    break;
+                                case numberType_1.NumberType.Double:
+                                    f = buffer.writeDoubleLE;
+                                    break;
+                                default: throw new Error("Unknown number type.");
+                            }
+                        }
+                        var stPos = meta.position;
+                        var _len = meta.nestedSize;
+                        for (var _b = 0, a_2 = a; _b < a_2.length; _b++) {
+                            var item = a_2[_b];
+                            f(item, _len);
+                            stPos += _len;
+                        }
                     }
                 }
+                if (this[meta.name] === undefined || this[meta.name] === null) {
+                    throw new Error("Unset variable '" + meta.name + "' is not allowed!");
+                }
             }
-            if (this[meta.name] === undefined || this[meta.name] === null) {
-                throw "Unset variable '" + meta.name + "' is not allowed!";
-            }
+            return buffer;
         }
-        if (typeof (this.crcInfo) !== "undefined") {
-            var thisAny = this;
-            var l = 0;
-            if (typeof (lastMeta.length) === "number")
-                l = lastMeta.length;
-            else if (typeof (this[lastMeta.name].length) === "number")
-                l = this[lastMeta.name].length;
+        catch (error) {
+            if (err)
+                err(error);
             else
-                throw "Invalid length for " + lastMeta.name + " field";
-            var crcBuff = Buffer.from((this[thisAny.crcInfo.name]).compute(buffer.slice(thisAny.crcInfo.startByte, thisAny.crcInfo.stopByte)));
-            crcBuff.copy(buffer, lastMeta.position + l, 0, thisAny.crcInfo.length);
+                throw error;
         }
-        if (typeof (this.endInfo) !== "undefined") {
-            buffer[buffer.length - 1] = this[this.endInfo.name];
-        }
-        return buffer;
     };
     /**
      * Set values of properties from a buffer
      */
-    Serializable.prototype.deserialize = function (buffer, defs) {
+    Serializable.prototype.deserialize = function (buffer, defs, err) {
         defs = defs || {};
         var metas = this.serializeMetadata;
         var len = buffer.length;
-        var end = typeof (this.endInfo) !== "undefined" && this.endInfo.enable !== false ? this[this.endInfo.name] : null;
-        if (end !== null && typeof (end) === "number" && buffer[buffer.length - 1] !== end)
-            throw "unexpected end of frame";
-        ////////////////////////
-        var dyn = len - (typeof (this.crcInfo) !== "undefined" && typeof (this.crcInfo.length) === "number" ? this.crcInfo.length : 0) - (end ? 1 : 0);
-        dyn -= metas.filter(function (o) { return !o.ignoreDeserialize && typeof (o.length) === "number"; }).reduce(function (a, b) { return a + b.length; }, 0);
-        if (typeof (this.crcInfo) !== "undefined") {
-            var thisAny = this;
-            var crcBuff = (this[thisAny.crcInfo.name]).compute(buffer.slice(thisAny.crcInfo.startByte, thisAny.crcInfo.stopByte));
-            var crcread = buffer.slice(len - thisAny.crcInfo.length - (end ? 1 : 0), len - (end ? 1 : 0));
-            if (crcBuff.compare(crcread) !== 0)
-                throw "CRC not match";
-        }
-        for (var _i = 0, metas_2 = metas; _i < metas_2.length; _i++) {
-            var meta = metas_2[_i];
-            if (meta.ignoreDeserialize)
-                continue;
-            if (meta.propertyType === propertyType_1.PropertyType.Number) {
-                if (meta.bitOrder === null || meta.bitOrder === undefined) {
-                    meta.bitOrder = defs.bitOrder || bitOrder_1.BitOrder.BE;
-                }
-                if (meta.numberType === null || meta.numberType === undefined) {
-                    meta.numberType = defs.numberType || numberType_1.NumberType.UInt8;
-                }
-                if (meta.bitOrder === bitOrder_1.BitOrder.BE) {
-                    switch (meta.numberType) {
-                        case numberType_1.NumberType.Int8:
-                            this[meta.name] = buffer.readInt8(meta.position);
-                            break;
-                        case numberType_1.NumberType.UInt8:
-                            this[meta.name] = buffer.readUInt8(meta.position);
-                            break;
-                        case numberType_1.NumberType.Int16:
-                            this[meta.name] = buffer.readInt16BE(meta.position);
-                            break;
-                        case numberType_1.NumberType.UInt16:
-                            this[meta.name] = buffer.readUInt16BE(meta.position);
-                            break;
-                        case numberType_1.NumberType.Int32:
-                            this[meta.name] = buffer.readInt32BE(meta.position);
-                            break;
-                        case numberType_1.NumberType.UInt32:
-                            this[meta.name] = buffer.readUInt32BE(meta.position);
-                            break;
-                        case numberType_1.NumberType.Float:
-                            this[meta.name] = buffer.readFloatBE(meta.position);
-                            break;
-                        case numberType_1.NumberType.Double:
-                            this[meta.name] = buffer.readDoubleBE(meta.position);
-                            break;
-                        default: throw "Unknown number type.";
-                    }
-                }
-                else {
-                    switch (meta.numberType) {
-                        case numberType_1.NumberType.Int8:
-                            this[meta.name] = buffer.readInt8(meta.position);
-                            break;
-                        case numberType_1.NumberType.UInt8:
-                            this[meta.name] = buffer.readUInt8(meta.position);
-                            break;
-                        case numberType_1.NumberType.Int16:
-                            this[meta.name] = buffer.readInt16LE(meta.position);
-                            break;
-                        case numberType_1.NumberType.UInt16:
-                            this[meta.name] = buffer.readUInt16LE(meta.position);
-                            break;
-                        case numberType_1.NumberType.Int32:
-                            this[meta.name] = buffer.readInt32LE(meta.position);
-                            break;
-                        case numberType_1.NumberType.UInt32:
-                            this[meta.name] = buffer.readUInt32LE(meta.position);
-                            break;
-                        case numberType_1.NumberType.Float:
-                            this[meta.name] = buffer.readFloatLE(meta.position);
-                            break;
-                        case numberType_1.NumberType.Double:
-                            this[meta.name] = buffer.readDoubleLE(meta.position);
-                            break;
-                        default: throw "Unknown number type.";
-                    }
-                }
-            }
-            if (meta.propertyType === propertyType_1.PropertyType.String) {
-                if (meta.textEncoding === null || meta.textEncoding === undefined) {
-                    meta.textEncoding = defs.textEncoding || textEncoding_1.TextEncoding.ASCII;
-                }
-                var l = typeof (meta.length) !== "undefined" ? meta.length : dyn;
-                this[meta.name] = buffer.toString(meta.textEncoding, meta.position, meta.position + l);
-            }
-            if (meta.propertyType === propertyType_1.PropertyType.Buffer) {
-                var l = typeof (meta.length) !== "undefined" ? meta.length : dyn;
-                this[meta.name] = Buffer.from(buffer.slice(meta.position, meta.position + l));
-            }
-            if (meta.propertyType === propertyType_1.PropertyType.Object) {
-                //let l = typeof(meta.length) !== "undefined" ? meta.length : dyn;
-                var a = new meta.nestedType();
-                this[meta.name] = a.deserialize(Buffer.from(buffer.slice(meta.position, meta.position + meta.length)), defs);
-            }
-            if (meta.propertyType === propertyType_1.PropertyType.Array) {
-                if (meta.nestedType.prototype instanceof Serializable) {
-                    var a = new Array();
-                    var reps = meta.length / meta.nestedSize;
-                    var start = meta.position;
-                    for (var i = 0; i < reps; i++) {
-                        var o = new meta.nestedType();
-                        o.deserialize(Buffer.from(buffer.slice(start, start + meta.nestedSize)), defs);
-                        a.push(o);
-                    }
-                    this[meta.name] = a;
-                }
-                if (meta.nestedType === propertyType_1.PropertyType.Number) {
-                    var a = new Array();
-                    var f = void 0;
-                    if (meta.nestedBitOrder === bitOrder_1.BitOrder.BE) {
-                        switch (meta.nestedNumber) {
+        var lastWrite = 0;
+        try {
+            for (var _i = 0, metas_2 = metas; _i < metas_2.length; _i++) {
+                var meta = metas_2[_i];
+                if (meta.ignore)
+                    continue;
+                if (meta.propertyType === propertyType_1.PropertyType.Number) {
+                    if (typeof (meta.length) !== "number")
+                        throw new Error("Invalid length for " + meta.name + " field");
+                    if (typeof (meta.position) !== "number")
+                        throw new Error("Invalid position for " + meta.name + " field");
+                    meta.bitOrder = meta.bitOrder || defs.bitOrder;
+                    meta.numberType = meta.numberType || defs.numberType;
+                    if (meta.bitOrder === bitOrder_1.BitOrder.BE) {
+                        switch (meta.numberType) {
                             case numberType_1.NumberType.Int8:
-                                f = buffer.readInt8;
+                                this[meta.name] = buffer.readInt8(meta.position);
                                 break;
                             case numberType_1.NumberType.UInt8:
-                                f = buffer.readUInt8;
+                                this[meta.name] = buffer.readUInt8(meta.position);
                                 break;
                             case numberType_1.NumberType.Int16:
-                                f = buffer.readInt16BE;
+                                this[meta.name] = buffer.readInt16BE(meta.position);
                                 break;
                             case numberType_1.NumberType.UInt16:
-                                f = buffer.readUInt16BE;
+                                this[meta.name] = buffer.readUInt16BE(meta.position);
                                 break;
                             case numberType_1.NumberType.Int32:
-                                f = buffer.readInt32BE;
+                                this[meta.name] = buffer.readInt32BE(meta.position);
                                 break;
                             case numberType_1.NumberType.UInt32:
-                                f = buffer.readUInt32BE;
+                                this[meta.name] = buffer.readUInt32BE(meta.position);
                                 break;
                             case numberType_1.NumberType.Float:
-                                f = buffer.readFloatBE;
+                                this[meta.name] = buffer.readFloatBE(meta.position);
                                 break;
                             case numberType_1.NumberType.Double:
-                                f = buffer.readDoubleBE;
+                                this[meta.name] = buffer.readDoubleBE(meta.position);
                                 break;
-                            default: throw "Unknown number type.";
+                            default: throw new Error("Unknown number type.");
                         }
                     }
                     else {
-                        switch (meta.nestedNumber) {
+                        switch (meta.numberType) {
                             case numberType_1.NumberType.Int8:
-                                f = buffer.readInt8;
+                                this[meta.name] = buffer.readInt8(meta.position);
                                 break;
                             case numberType_1.NumberType.UInt8:
-                                f = buffer.readUInt8;
+                                this[meta.name] = buffer.readUInt8(meta.position);
                                 break;
                             case numberType_1.NumberType.Int16:
-                                f = buffer.readInt16LE;
+                                this[meta.name] = buffer.readInt16LE(meta.position);
                                 break;
                             case numberType_1.NumberType.UInt16:
-                                f = buffer.readUInt16LE;
+                                this[meta.name] = buffer.readUInt16LE(meta.position);
                                 break;
                             case numberType_1.NumberType.Int32:
-                                f = buffer.readInt32LE;
+                                this[meta.name] = buffer.readInt32LE(meta.position);
                                 break;
                             case numberType_1.NumberType.UInt32:
-                                f = buffer.readUInt32LE;
+                                this[meta.name] = buffer.readUInt32LE(meta.position);
                                 break;
                             case numberType_1.NumberType.Float:
-                                f = buffer.readFloatLE;
+                                this[meta.name] = buffer.readFloatLE(meta.position);
                                 break;
                             case numberType_1.NumberType.Double:
-                                f = buffer.readDoubleLE;
+                                this[meta.name] = buffer.readDoubleLE(meta.position);
                                 break;
-                            default: throw "Unknown number type.";
+                            default: throw new Error("Unknown number type.");
                         }
                     }
-                    var reps = meta.length / meta.nestedSize;
-                    var start = meta.position;
-                    for (var i = 0; i < reps; i++) {
-                        a.push(f.call(buffer, start));
-                        start += meta.nestedSize;
+                    lastWrite += (meta.position + meta.length);
+                }
+                if (meta.propertyType === propertyType_1.PropertyType.String) {
+                    if (typeof (meta.position) !== "number")
+                        throw new Error("Invalid position for " + meta.name + " field");
+                    meta.textEncoding = meta.textEncoding || defs.textEncoding;
+                    var l = typeof (meta.length) !== "undefined" ? meta.length : (len - lastWrite);
+                    this[meta.name] = buffer.toString(meta.textEncoding, meta.position, meta.position + l);
+                    lastWrite += (meta.position + meta.length);
+                }
+                if (meta.propertyType === propertyType_1.PropertyType.Buffer) {
+                    if (typeof (meta.position) !== "number")
+                        throw new Error("Invalid position for " + meta.name + " field");
+                    var l = typeof (meta.length) !== "undefined" ? meta.length : (len - lastWrite);
+                    this[meta.name] = buffer_1.Buffer.from(buffer.slice(meta.position, meta.position + l));
+                    lastWrite += (meta.position + meta.length);
+                }
+                if (meta.propertyType === propertyType_1.PropertyType.Object) {
+                    if (typeof (meta.position) !== "number")
+                        throw new Error("Invalid position for " + meta.name + " field");
+                    var a = new meta.nestedType();
+                    this[meta.name] = a.deserialize(buffer_1.Buffer.from(buffer.slice(meta.position, meta.position + meta.length)), defs, err);
+                }
+                if (meta.propertyType === propertyType_1.PropertyType.Array) {
+                    if (typeof (meta.position) !== "number")
+                        throw new Error("Invalid position for " + meta.name + " field");
+                    if (meta.nestedType.prototype instanceof Serializable) {
+                        var array = new Array();
+                        var _len = meta.length || (len - lastWrite);
+                        var items = _len / meta.nestedSize;
+                        var start = meta.position;
+                        for (var i = 0; i < items; i++) {
+                            var o = new meta.nestedType();
+                            o.deserialize(buffer_1.Buffer.from(buffer.slice(start, start + meta.nestedSize)), defs, err);
+                            array.push(o);
+                        }
+                        this[meta.name] = array;
                     }
-                    this[meta.name] = a;
+                    if (meta.nestedType === propertyType_1.PropertyType.Number) {
+                        if (typeof (meta.position) !== "number")
+                            throw new Error("Invalid position for " + meta.name + " field");
+                        var f = void 0;
+                        if (meta.nestedBitOrder === bitOrder_1.BitOrder.BE) {
+                            switch (meta.nestedNumber) {
+                                case numberType_1.NumberType.Int8:
+                                    f = buffer.readInt8;
+                                    break;
+                                case numberType_1.NumberType.UInt8:
+                                    f = buffer.readUInt8;
+                                    break;
+                                case numberType_1.NumberType.Int16:
+                                    f = buffer.readInt16BE;
+                                    break;
+                                case numberType_1.NumberType.UInt16:
+                                    f = buffer.readUInt16BE;
+                                    break;
+                                case numberType_1.NumberType.Int32:
+                                    f = buffer.readInt32BE;
+                                    break;
+                                case numberType_1.NumberType.UInt32:
+                                    f = buffer.readUInt32BE;
+                                    break;
+                                case numberType_1.NumberType.Float:
+                                    f = buffer.readFloatBE;
+                                    break;
+                                case numberType_1.NumberType.Double:
+                                    f = buffer.readDoubleBE;
+                                    break;
+                                default: throw new Error("Unknown number type.");
+                            }
+                        }
+                        else {
+                            switch (meta.nestedNumber) {
+                                case numberType_1.NumberType.Int8:
+                                    f = buffer.readInt8;
+                                    break;
+                                case numberType_1.NumberType.UInt8:
+                                    f = buffer.readUInt8;
+                                    break;
+                                case numberType_1.NumberType.Int16:
+                                    f = buffer.readInt16LE;
+                                    break;
+                                case numberType_1.NumberType.UInt16:
+                                    f = buffer.readUInt16LE;
+                                    break;
+                                case numberType_1.NumberType.Int32:
+                                    f = buffer.readInt32LE;
+                                    break;
+                                case numberType_1.NumberType.UInt32:
+                                    f = buffer.readUInt32LE;
+                                    break;
+                                case numberType_1.NumberType.Float:
+                                    f = buffer.readFloatLE;
+                                    break;
+                                case numberType_1.NumberType.Double:
+                                    f = buffer.readDoubleLE;
+                                    break;
+                                default: throw new Error("Unknown number type.");
+                            }
+                        }
+                        var array = new Array();
+                        var _len = meta.length || (len - lastWrite);
+                        var items = _len / meta.nestedSize;
+                        var start = meta.position;
+                        for (var i = 0; i < items; i++) {
+                            array.push(f.call(buffer, start));
+                            start += meta.nestedSize;
+                        }
+                        this[meta.name] = array;
+                    }
                 }
             }
+            return this;
+        }
+        catch (error) {
+            if (err)
+                err(error);
+            else
+                throw error;
         }
     };
     return Serializable;
