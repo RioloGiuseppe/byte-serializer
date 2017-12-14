@@ -149,7 +149,7 @@ var Serializable = /** @class */ (function () {
                     if (typeof (meta.position) !== "number")
                         throw new Error("Invalid position for " + meta.name + " field");
                     if (meta.nestedType.prototype instanceof Serializable) {
-                        if (typeof meta.nestedType !== "object")
+                        if (typeof meta.nestedType !== "object" || typeof meta.nestedType !== "function")
                             throw new Error("Invalid type for " + meta.name + " field");
                         var a = (this[meta.name]);
                         var stPos = meta.position;
