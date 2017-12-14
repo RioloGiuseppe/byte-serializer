@@ -5,7 +5,7 @@ export { PropertyType } from './enums/propertyType';
 export { Serializable } from './serializer/serializable';
 export { SerializableInfo } from './serializer/serializableInfo';
 export { CommonMetadata } from './interfaces/commonMetadata';
-export { NestedMetadata } from './interfaces/NestedMetadata';
+export { NestedMetadata } from './interfaces/nestedMetadata';
 export { NumberMetadata } from './interfaces/numberMetadata';
 export { StringMetadata } from './interfaces/stringMetadata';
 export { Defaults } from './interfaces/defaults';
