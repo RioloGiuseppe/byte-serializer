@@ -148,11 +148,9 @@ var Serializable = /** @class */ (function () {
                 if (meta.propertyType === propertyType_1.PropertyType.Array) {
                     if (typeof (meta.position) !== "number")
                         throw new Error("Invalid position for " + meta.name + " field");
-                    if (typeof meta.nestedType !== "number")
-                        throw new Error("Invalid length for " + meta.name + " field");
-                    if (typeof meta.nestedType !== "number" || typeof meta.nestedType !== "object")
-                        throw new Error("Invalid type for " + meta.name + " field");
                     if (meta.nestedType.prototype instanceof Serializable) {
+                        if (typeof meta.nestedType !== "object")
+                            throw new Error("Invalid type for " + meta.name + " field");
                         var a = (this[meta.name]);
                         var stPos = meta.position;
                         var _len = meta.nestedSize;
@@ -163,6 +161,8 @@ var Serializable = /** @class */ (function () {
                         }
                     }
                     if (meta.nestedType === propertyType_1.PropertyType.Number) {
+                        if (typeof meta.nestedType !== "number")
+                            throw new Error("Invalid length for " + meta.name + " field");
                         var a = (this[meta.name]);
                         var f = void 0;
                         if (meta.nestedBitOrder === bitOrder_1.BitOrder.BE) {

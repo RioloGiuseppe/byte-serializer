@@ -1,12 +1,12 @@
 {
     "name": "byte-serializer",
     "displayName": "byte-serializer",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "description": "Simple and high speed serializer for nodejs.",
     "main": "dist/index.js",
     "typings": "./dist/index.d.ts",
     "scripts": {
-        "prepublish": "tsc --outDir dist",
+        "prepublish": "tsc --outDir dist && npm run doc && git add . && git commit -m \"publish\" && git push" ,
         "doc": "typedoc --module commonjs --target ES5 --out docs src --name \"byte-serializer\" --mode modules --ignoreCompilerErrors --hideGenerator --emitDecoratorMetadata --experimentalDecorators --suppressExcessPropertyErrors --suppressImplicitAnyIndexErrors --excludePrivate --readme readme.md ",
         "test": "echo \"Error: no test specified\" && exit 1"
     },

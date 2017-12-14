@@ -111,9 +111,8 @@ export abstract class Serializable {
                 }
                 if (meta.propertyType === PropertyType.Array) {
                     if(typeof(meta.position)!=="number") throw new Error("Invalid position for " + meta.name + " field");
-                    if(typeof(<any>(<NestedMetadata>meta).nestedType)!=="number") throw new Error("Invalid length for " + meta.name + " field");
-                    if(typeof(<any>(<NestedMetadata>meta).nestedType)!=="number" || typeof(<any>(<NestedMetadata>meta).nestedType)!=="object") throw new Error("Invalid type for " + meta.name + " field");
                     if((<any>(<NestedMetadata>meta).nestedType).prototype instanceof Serializable) {
+                        if(typeof(<any>(<NestedMetadata>meta).nestedType)!=="object") throw new Error("Invalid type for " + meta.name + " field");
                         let a = <Array<Serializable>>((<any>this)[meta.name]);
                         let stPos = meta.position;
                         let _len = (<NestedMetadata>meta).nestedSize;
@@ -123,6 +122,7 @@ export abstract class Serializable {
                         }
                     }
                     if((<NestedMetadata>meta).nestedType === PropertyType.Number){
+                        if(typeof(<any>(<NestedMetadata>meta).nestedType)!=="number") throw new Error("Invalid length for " + meta.name + " field");
                         let a = <Array<Serializable|number>>((<any>this)[meta.name]);
                         let f:(value:number,offset:number,noAssert?:boolean)=>number;
                         if((<NestedMetadata>meta).nestedBitOrder === BitOrder.BE) {
