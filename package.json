@@ -1,7 +1,7 @@
 {
     "name": "byte-serializer",
     "displayName": "byte-serializer",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "description": "Simple and high speed serializer for nodejs.",
     "main": "dist/index.js",
     "typings": "./dist/index.d.ts",

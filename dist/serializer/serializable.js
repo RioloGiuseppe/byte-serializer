@@ -323,7 +323,7 @@ var Serializable = /** @class */ (function () {
                             default: throw new Error("Unknown number type.");
                         }
                     }
-                    lastWrite += (meta.position + meta.length);
+                    lastWrite += meta.length;
                 }
                 if (meta.propertyType === propertyType_1.PropertyType.String) {
                     if (typeof (meta.position) !== "number")
@@ -331,14 +331,14 @@ var Serializable = /** @class */ (function () {
                     meta.textEncoding = meta.textEncoding || defs.textEncoding;
                     var l = typeof (meta.length) !== "undefined" ? meta.length : (len - lastWrite);
                     this[meta.name] = buffer.toString(meta.textEncoding, meta.position, meta.position + l);
-                    lastWrite += (meta.position + meta.length);
+                    lastWrite += meta.length;
                 }
                 if (meta.propertyType === propertyType_1.PropertyType.Buffer) {
                     if (typeof (meta.position) !== "number")
                         throw new Error("Invalid position for " + meta.name + " field");
                     var l = typeof (meta.length) !== "undefined" ? meta.length : (len - lastWrite);
                     this[meta.name] = buffer_1.Buffer.from(buffer.slice(meta.position, meta.position + l));
-                    lastWrite += (meta.position + meta.length);
+                    lastWrite += meta.length;
                 }
                 if (meta.propertyType === propertyType_1.PropertyType.Object) {
                     if (typeof (meta.position) !== "number")

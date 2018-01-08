@@ -210,7 +210,7 @@ export abstract class Serializable {
                             default: throw new Error("Unknown number type.");
                         }
                     }
-                    lastWrite += (meta.position + meta.length);
+                    lastWrite += meta.length;
                 }
 
                 if (meta.propertyType === PropertyType.String) {
@@ -218,14 +218,14 @@ export abstract class Serializable {
                     (<StringMetadata>meta).textEncoding = (<StringMetadata>meta).textEncoding || defs.textEncoding;
                     let l = typeof(meta.length) !== "undefined" ? meta.length : (len - lastWrite);
                     (<any>this)[meta.name] = buffer.toString((<StringMetadata>meta).textEncoding, meta.position, meta.position + l);
-                    lastWrite += (meta.position + meta.length);
+                    lastWrite += meta.length;
                 }
 
                 if (meta.propertyType === PropertyType.Buffer) {
                     if(typeof(meta.position)!=="number") throw new Error("Invalid position for " + meta.name + " field");
                     let l = typeof(meta.length) !== "undefined" ? meta.length : (len - lastWrite);
                     (<any>this)[meta.name] = Buffer.from(buffer.slice(meta.position, meta.position + l));
-                    lastWrite += (meta.position + meta.length);
+                    lastWrite += meta.length;
                 }
 
                 if (meta.propertyType === PropertyType.Object) {
