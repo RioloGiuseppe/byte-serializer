@@ -226,7 +226,7 @@ var Serializable = /** @class */ (function () {
                         var _len = meta.nestedSize;
                         for (var _b = 0, a_2 = a; _b < a_2.length; _b++) {
                             var item = a_2[_b];
-                            f(item, _len);
+                            f.apply(buffer, [item, _len]);
                             stPos += _len;
                         }
                     }
