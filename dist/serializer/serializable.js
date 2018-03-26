@@ -161,8 +161,7 @@ var Serializable = /** @class */ (function () {
                         }
                     }
                     if (meta.nestedType === propertyType_1.PropertyType.Number) {
-                        if (typeof meta.nestedType !== "number")
-                            throw new Error("Invalid length for " + meta.name + " field");
+                        //if(<any>(<NestedMetadata>meta).nestedType!=="number") throw new Error("Invalid length for " + meta.name + " field");
                         var a = (this[meta.name]);
                         var f = void 0;
                         if (meta.nestedBitOrder === bitOrder_1.BitOrder.BE) {

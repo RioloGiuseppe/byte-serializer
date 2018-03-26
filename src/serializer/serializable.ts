@@ -122,7 +122,7 @@ export abstract class Serializable {
                         }
                     }
                     if((<NestedMetadata>meta).nestedType === PropertyType.Number){
-                        if(typeof(<any>(<NestedMetadata>meta).nestedType)!=="number") throw new Error("Invalid length for " + meta.name + " field");
+                        //if(<any>(<NestedMetadata>meta).nestedType!=="number") throw new Error("Invalid length for " + meta.name + " field");
                         let a = <Array<Serializable|number>>((<any>this)[meta.name]);
                         let f:(value:number,offset:number,noAssert?:boolean)=>number;
                         if((<NestedMetadata>meta).nestedBitOrder === BitOrder.BE) {
