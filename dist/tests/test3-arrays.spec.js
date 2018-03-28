@@ -21,20 +21,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var chai_1 = require("chai");
 require("mocha");
-var byte_serializer_1 = require("byte-serializer");
+var serializable_1 = require("../serializer/serializable");
+var serializableInfo_1 = require("../serializer/serializableInfo");
+var bitOrder_1 = require("../enums/bitOrder");
+var numberType_1 = require("../enums/numberType");
 var DataExample = /** @class */ (function (_super) {
     __extends(DataExample, _super);
     function DataExample() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     __decorate([
-        byte_serializer_1.SerializableInfo.position(0),
-        byte_serializer_1.SerializableInfo.lenght(10),
-        byte_serializer_1.SerializableInfo.nestedNumberArray(byte_serializer_1.NumberType.UInt8, byte_serializer_1.BitOrder.BE),
+        serializableInfo_1.SerializableInfo.position(0),
+        serializableInfo_1.SerializableInfo.lenght(10),
+        serializableInfo_1.SerializableInfo.nestedNumberArray(numberType_1.NumberType.UInt8, bitOrder_1.BitOrder.BE),
         __metadata("design:type", Array)
     ], DataExample.prototype, "array", void 0);
     return DataExample;
-}(byte_serializer_1.Serializable));
+}(serializable_1.Serializable));
 describe("Proprieta' di tipo array", function () {
     it('Oggetto semplice: numerico', function () {
         var data = new DataExample();

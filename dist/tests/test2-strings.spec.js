@@ -21,20 +21,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var chai_1 = require("chai");
 require("mocha");
-var byte_serializer_1 = require("byte-serializer");
+var serializable_1 = require("../serializer/serializable");
+var serializableInfo_1 = require("../serializer/serializableInfo");
+var textEncoding_1 = require("../enums/textEncoding");
 var DataExample = /** @class */ (function (_super) {
     __extends(DataExample, _super);
     function DataExample() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     __decorate([
-        byte_serializer_1.SerializableInfo.position(0),
-        byte_serializer_1.SerializableInfo.lenght(10),
-        byte_serializer_1.SerializableInfo.textEncoding(byte_serializer_1.TextEncoding.ASCII),
+        serializableInfo_1.SerializableInfo.position(0),
+        serializableInfo_1.SerializableInfo.lenght(10),
+        serializableInfo_1.SerializableInfo.textEncoding(textEncoding_1.TextEncoding.ASCII),
         __metadata("design:type", String)
     ], DataExample.prototype, "Text", void 0);
     return DataExample;
-}(byte_serializer_1.Serializable));
+}(serializable_1.Serializable));
 describe("Proprieta' di tipo stringa", function () {
     it('Oggetto semplice e stringa di lunghezza giusta', function () {
         var data = new DataExample();

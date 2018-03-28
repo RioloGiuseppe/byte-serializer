@@ -21,55 +21,58 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var chai_1 = require("chai");
 require("mocha");
-var byte_serializer_1 = require("byte-serializer");
+var serializable_1 = require("../serializer/serializable");
+var serializableInfo_1 = require("../serializer/serializableInfo");
+var bitOrder_1 = require("../enums/bitOrder");
+var numberType_1 = require("../enums/numberType");
 var DataExample = /** @class */ (function (_super) {
     __extends(DataExample, _super);
     function DataExample() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     __decorate([
-        byte_serializer_1.SerializableInfo.position(0),
-        byte_serializer_1.SerializableInfo.lenght(1),
-        byte_serializer_1.SerializableInfo.bitOrder(byte_serializer_1.BitOrder.BE),
-        byte_serializer_1.SerializableInfo.numberType(byte_serializer_1.NumberType.UInt8),
+        serializableInfo_1.SerializableInfo.position(0),
+        serializableInfo_1.SerializableInfo.lenght(1),
+        serializableInfo_1.SerializableInfo.bitOrder(bitOrder_1.BitOrder.BE),
+        serializableInfo_1.SerializableInfo.numberType(numberType_1.NumberType.UInt8),
         __metadata("design:type", Number)
     ], DataExample.prototype, "number1", void 0);
     __decorate([
-        byte_serializer_1.SerializableInfo.position(1),
-        byte_serializer_1.SerializableInfo.lenght(2),
-        byte_serializer_1.SerializableInfo.bitOrder(byte_serializer_1.BitOrder.BE),
-        byte_serializer_1.SerializableInfo.numberType(byte_serializer_1.NumberType.Int16),
+        serializableInfo_1.SerializableInfo.position(1),
+        serializableInfo_1.SerializableInfo.lenght(2),
+        serializableInfo_1.SerializableInfo.bitOrder(bitOrder_1.BitOrder.BE),
+        serializableInfo_1.SerializableInfo.numberType(numberType_1.NumberType.Int16),
         __metadata("design:type", Number)
     ], DataExample.prototype, "number2", void 0);
     return DataExample;
-}(byte_serializer_1.Serializable));
+}(serializable_1.Serializable));
 var DataExample2 = /** @class */ (function (_super) {
     __extends(DataExample2, _super);
     function DataExample2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     __decorate([
-        byte_serializer_1.SerializableInfo.position(0),
-        byte_serializer_1.SerializableInfo.lenght(1),
-        byte_serializer_1.SerializableInfo.bitOrder(byte_serializer_1.BitOrder.BE),
-        byte_serializer_1.SerializableInfo.numberType(byte_serializer_1.NumberType.UInt8),
+        serializableInfo_1.SerializableInfo.position(0),
+        serializableInfo_1.SerializableInfo.lenght(1),
+        serializableInfo_1.SerializableInfo.bitOrder(bitOrder_1.BitOrder.BE),
+        serializableInfo_1.SerializableInfo.numberType(numberType_1.NumberType.UInt8),
         __metadata("design:type", Number)
     ], DataExample2.prototype, "number1", void 0);
     __decorate([
-        byte_serializer_1.SerializableInfo.position(1),
-        byte_serializer_1.SerializableInfo.lenght(2),
-        byte_serializer_1.SerializableInfo.bitOrder(byte_serializer_1.BitOrder.BE),
-        byte_serializer_1.SerializableInfo.numberType(byte_serializer_1.NumberType.Int16),
+        serializableInfo_1.SerializableInfo.position(1),
+        serializableInfo_1.SerializableInfo.lenght(2),
+        serializableInfo_1.SerializableInfo.bitOrder(bitOrder_1.BitOrder.BE),
+        serializableInfo_1.SerializableInfo.numberType(numberType_1.NumberType.Int16),
         __metadata("design:type", Number)
     ], DataExample2.prototype, "number2", void 0);
     __decorate([
-        byte_serializer_1.SerializableInfo.position(3),
-        byte_serializer_1.SerializableInfo.lenght(3),
-        byte_serializer_1.SerializableInfo.nested(DataExample),
+        serializableInfo_1.SerializableInfo.position(3),
+        serializableInfo_1.SerializableInfo.lenght(3),
+        serializableInfo_1.SerializableInfo.nested(DataExample),
         __metadata("design:type", DataExample)
     ], DataExample2.prototype, "data", void 0);
     return DataExample2;
-}(byte_serializer_1.Serializable));
+}(serializable_1.Serializable));
 describe("Proprieta' di tipo numerico", function () {
     it('Oggetto semplice: solo serializzazione', function () {
         var data = new DataExample();
