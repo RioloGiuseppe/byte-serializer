@@ -7,7 +7,7 @@
     "typings": "./dist/index.d.ts",
     "scripts": {
         "test": "mocha -r ts-node/register src/**/*.spec.ts",
-        "prepublish": "tsc --outDir dist && npm run doc && git add . && git commit -m \"publish\" && git push" ,
+        "prepublish": "tsc --outDir dist && npm run doc && git add . && git commit -m \"publish\" && git push",
         "doc": "typedoc --module commonjs --target ES5 --out docs src --name \"byte-serializer\" --mode modules --ignoreCompilerErrors --hideGenerator --emitDecoratorMetadata --experimentalDecorators --suppressExcessPropertyErrors --suppressImplicitAnyIndexErrors --excludePrivate --readme readme.md "
     },
     "keywords": [
@@ -42,9 +42,10 @@
     "homepage": "https://riologiuseppe.github.io/byte-serializer",
     "readme": "https://github.com/RioloGiuseppe/byte-serializer#readme",
     "devDependencies": {
-        "@types/node": "^8.0.34",
         "@types/chai": "4.1.2",
         "@types/mocha": "5.0.0",
+        "@types/node": "^8.0.34",
+        "buffer-equals": "^1.0.4",
         "chai": "4.1.2",
         "mocha": "5.0.5",
         "ts-node": "5.0.1",

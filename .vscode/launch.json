@@ -4,6 +4,6 @@
         "type": "node",
         "request": "launch",
         "name": "Launch Program",
-        "program": "${workspaceRoot}/build/sample/sample.js"
+        "program": "${workspaceRoot}/build/tests/number.spec.js"
     }]
 }

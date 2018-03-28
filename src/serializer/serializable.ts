@@ -67,7 +67,7 @@ export abstract class Serializable {
             for (let meta of metas) {
                 if (meta.ignore) continue;
                 if (meta.propertyType === PropertyType.Number) {
-                    (<NumberMetadata>meta).bitOrder = (<NumberMetadata>meta).bitOrder || defs.bitOrder || BitOrder.BE;
+                    (<NumberMetadata>meta).bitOrder = typeof((<NumberMetadata>meta).bitOrder) !=="number" ? defs.bitOrder : (<NumberMetadata>meta).bitOrder;
                     (<NumberMetadata>meta).numberType = (<NumberMetadata>meta).numberType || defs.numberType || NumberType.UInt8;
                     if ((<NumberMetadata>meta).bitOrder === BitOrder.BE) {
                         switch ((<NumberMetadata>meta).numberType) {
@@ -183,7 +183,7 @@ export abstract class Serializable {
                 if (meta.propertyType === PropertyType.Number) {
                     if (typeof (meta.length) !== "number") throw new Error("Invalid length for " + meta.name + " field");
                     if (typeof (meta.position) !== "number") throw new Error("Invalid position for " + meta.name + " field");
-                    (<NumberMetadata>meta).bitOrder = (<NumberMetadata>meta).bitOrder || defs.bitOrder;
+                    (<NumberMetadata>meta).bitOrder = typeof((<NumberMetadata>meta).bitOrder) !=="number" ? defs.bitOrder : (<NumberMetadata>meta).bitOrder;
                     (<NumberMetadata>meta).numberType = (<NumberMetadata>meta).numberType || defs.numberType;
                     if ((<NumberMetadata>meta).bitOrder === BitOrder.BE) {
                         switch ((<NumberMetadata>meta).numberType) {

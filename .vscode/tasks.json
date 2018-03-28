@@ -7,7 +7,7 @@
             "kind": "build",
             "isDefault": true
         },
-        "taskName": "build",
+        "label": "build",
         "command": "tsc --diagnostics",
         "presentation": {
             "reveal": "always"
