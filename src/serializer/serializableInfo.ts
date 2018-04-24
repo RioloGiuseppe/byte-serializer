@@ -21,11 +21,16 @@ export module SerializableInfo {
     /**
      * Define the position in byte array of the property
      */
-    export function lenght(value : number) {
+    export function length(value : number) {
         return function (target : any, propertyKey : string) : void {
             addMeta(target, propertyKey, "length", value);
         }
     }
+
+    /**
+     * Alias for backwards compatibility
+     */
+    export const lenght = length;
 
     /**
      * Define the length of the property in byte
