@@ -46,19 +46,19 @@ import {Serializable, SerializerInfo, BitOrder, NumberType, TextEncoding} from '
 
 export class DataExample extends Serializable {
     @SerializerInfo.position(0)
-    @SerializerInfo.lenght(4)
+    @SerializerInfo.length(4)
     @SerializerInfo.bitOrder(BitOrder.BE)
     @SerializerInfo.numberType(NumberType.Int32)
     public Pippo:number;
 
     @SerializerInfo.position(4)
-    @SerializerInfo.lenght(2)
+    @SerializerInfo.length(2)
     @SerializerInfo.bitOrder(BitOrder.BE)
     @SerializerInfo.numberType(NumberType.Int16)
     public Pluto :number;
 
     @SerializerInfo.position(6)
-    @SerializerInfo.lenght(10)
+    @SerializerInfo.length(10)
     @SerializerInfo.textEncoding(TextEncoding.ASCII)
     public Text :string;
 }
