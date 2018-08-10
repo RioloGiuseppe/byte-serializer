@@ -51,9 +51,9 @@ export abstract class Serializable {
     /**
      * Return a buffer that contains all data information stored in properties of the current instance of the object
      */
-    public serialize(defs?: Defaults, err?: (e: Error) => void): Buffer {
+    public serialize(_defs?: Defaults, err?: (e: Error) => void): Buffer {
         try {
-            defs = Object.assign(Serializable.DefautSettings, defs || {});
+            let defs = Object.assign(Serializable.DefautSettings, _defs || {});
             let metas = this.serializeMetadata;
             let lastMeta = metas[metas.length - 1];
             let len = this.bufferLength;
@@ -166,8 +166,8 @@ export abstract class Serializable {
     /**
      * Set values of properties from a buffer
      */
-    public deserialize(buffer: Buffer, defs?: Defaults, err?: (e: Error) => void): Serializable {
-        defs = Object.assign(Serializable.DefautSettings, defs || {});
+    public deserialize(buffer: Buffer, _defs?: Defaults, err?: (e: Error) => void): Serializable {
+        let defs = Object.assign(Serializable.DefautSettings, _defs || {});
         let metas = this.serializeMetadata;
         let len = buffer.length;
         let lastWrite: number = 0;
