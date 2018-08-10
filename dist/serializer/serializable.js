@@ -53,22 +53,18 @@ var Serializable = /** @class */ (function () {
      */
     Serializable.prototype.serialize = function (defs, err) {
         try {
-            defs = defs || {
-                bitOrder: bitOrder_1.BitOrder.BE,
-                numberType: numberType_1.NumberType.Int32,
-                textEncoding: textEncoding_1.TextEncoding.ASCII
-            };
+            defs = Object.assign(Serializable.DefautSettings, defs || {});
             var metas = this.serializeMetadata;
             var lastMeta = metas[metas.length - 1];
             var len = this.bufferLength;
-            var buffer = buffer_1.Buffer.allocUnsafe(len);
+            var buffer = buffer_1.Buffer.alloc(len);
             for (var _i = 0, metas_1 = metas; _i < metas_1.length; _i++) {
                 var meta = metas_1[_i];
                 if (meta.ignore)
                     continue;
                 if (meta.propertyType === propertyType_1.PropertyType.Number) {
                     meta.bitOrder = meta.bitOrder || defs.bitOrder || bitOrder_1.BitOrder.BE;
-                    meta.numberType = meta.numberType || defs.numberType || numberType_1.NumberType.UInt8;
+                    meta.numberType = meta.numberType || defs.numberType || numberType_1.NumberType.UInt32;
                     if (meta.bitOrder === bitOrder_1.BitOrder.BE) {
                         switch (meta.numberType) {
                             case numberType_1.NumberType.Int8:
@@ -248,7 +244,7 @@ var Serializable = /** @class */ (function () {
      * Set values of properties from a buffer
      */
     Serializable.prototype.deserialize = function (buffer, defs, err) {
-        defs = defs || {};
+        defs = Object.assign(Serializable.DefautSettings, defs || {});
         var metas = this.serializeMetadata;
         var len = buffer.length;
         var lastWrite = 0;
@@ -262,7 +258,7 @@ var Serializable = /** @class */ (function () {
                         throw new Error("Invalid length for " + meta.name + " field");
                     if (typeof (meta.position) !== "number")
                         throw new Error("Invalid position for " + meta.name + " field");
-                    meta.bitOrder = meta.bitOrder || defs.bitOrder;
+                    meta.bitOrder = meta.bitOrder || defs.bitOrder || bitOrder_1.BitOrder.BE;
                     meta.numberType = meta.numberType || defs.numberType;
                     if (meta.bitOrder === bitOrder_1.BitOrder.BE) {
                         switch (meta.numberType) {
@@ -443,6 +439,7 @@ var Serializable = /** @class */ (function () {
                 throw error;
         }
     };
+    Serializable.DefautSettings = {};
     return Serializable;
 }());
 exports.Serializable = Serializable;

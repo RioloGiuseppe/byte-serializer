@@ -19,12 +19,16 @@ var SerializableInfo;
     /**
      * Define the position in byte array of the property
      */
-    function lenght(value) {
+    function length(value) {
         return function (target, propertyKey) {
             addMeta(target, propertyKey, "length", value);
         };
     }
-    SerializableInfo.lenght = lenght;
+    SerializableInfo.length = length;
+    /**
+     * Alias for backwards compatibility
+     */
+    SerializableInfo.lenght = length;
     /**
      * Define the length of the property in byte
      */

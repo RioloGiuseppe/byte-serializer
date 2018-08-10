@@ -5,6 +5,7 @@ import { Defaults } from '../interfaces/defaults';
  * Define the structure of the serializable payload and embed the main methods to transform array in to object and vice versa.
  */
 export declare abstract class Serializable {
+    static DefautSettings: Defaults;
     private _serializeMetadata?;
     private _messageMetadata?;
     private _bufferLength?;

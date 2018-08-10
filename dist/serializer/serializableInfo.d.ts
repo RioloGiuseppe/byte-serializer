@@ -15,7 +15,11 @@ export declare module SerializableInfo {
     /**
      * Define the position in byte array of the property
      */
-    function lenght(value: number): (target: any, propertyKey: string) => void;
+    function length(value: number): (target: any, propertyKey: string) => void;
+    /**
+     * Alias for backwards compatibility
+     */
+    const lenght: typeof length;
     /**
      * Define the length of the property in byte
      */

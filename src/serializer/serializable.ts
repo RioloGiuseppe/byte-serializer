@@ -7,9 +7,7 @@ import { CommonMetadata } from '../interfaces/commonMetadata'
 import { NumberMetadata } from '../interfaces/numberMetadata'
 import { NestedMetadata } from '../interfaces/nestedMetadata'
 import { StringMetadata } from '../interfaces/stringMetadata'
-import { CRC, CRCMetadata } from '../interfaces/crc'
 import { Defaults } from '../interfaces/defaults'
-import { } from 'node';
 import { Buffer } from 'buffer';
 
 /**
@@ -17,7 +15,7 @@ import { Buffer } from 'buffer';
  */
 export abstract class Serializable {
 
-
+    public static DefautSettings: Defaults = {};
     private _serializeMetadata?: CommonMetadata[];
     private _messageMetadata?: CommonMetadata[];
     private _bufferLength?: number;
@@ -55,11 +53,7 @@ export abstract class Serializable {
      */
     public serialize(defs?: Defaults, err?: (e: Error) => void): Buffer {
         try {
-            defs = defs || {
-                bitOrder: BitOrder.BE,
-                numberType: NumberType.Int32,
-                textEncoding: TextEncoding.ASCII
-            };
+            defs = Object.assign(Serializable.DefautSettings, defs || {});
             let metas = this.serializeMetadata;
             let lastMeta = metas[metas.length - 1];
             let len = this.bufferLength;
@@ -67,8 +61,8 @@ export abstract class Serializable {
             for (let meta of metas) {
                 if (meta.ignore) continue;
                 if (meta.propertyType === PropertyType.Number) {
-                    (<NumberMetadata>meta).bitOrder = typeof((<NumberMetadata>meta).bitOrder) !=="number" ? defs.bitOrder : (<NumberMetadata>meta).bitOrder;
-                    (<NumberMetadata>meta).numberType = (<NumberMetadata>meta).numberType || defs.numberType || NumberType.UInt8;
+                    (<NumberMetadata>meta).bitOrder = (<NumberMetadata>meta).bitOrder || defs.bitOrder || BitOrder.BE;
+                    (<NumberMetadata>meta).numberType = (<NumberMetadata>meta).numberType || defs.numberType || NumberType.UInt32;
                     if ((<NumberMetadata>meta).bitOrder === BitOrder.BE) {
                         switch ((<NumberMetadata>meta).numberType) {
                             case NumberType.Int8: buffer.writeInt8((<any>this)[meta.name], meta.position); break;
@@ -173,7 +167,7 @@ export abstract class Serializable {
      * Set values of properties from a buffer
      */
     public deserialize(buffer: Buffer, defs?: Defaults, err?: (e: Error) => void): Serializable {
-        defs = defs || {};
+        defs = Object.assign(Serializable.DefautSettings, defs || {});
         let metas = this.serializeMetadata;
         let len = buffer.length;
         let lastWrite: number = 0;
@@ -183,7 +177,7 @@ export abstract class Serializable {
                 if (meta.propertyType === PropertyType.Number) {
                     if (typeof (meta.length) !== "number") throw new Error("Invalid length for " + meta.name + " field");
                     if (typeof (meta.position) !== "number") throw new Error("Invalid position for " + meta.name + " field");
-                    (<NumberMetadata>meta).bitOrder = typeof((<NumberMetadata>meta).bitOrder) !=="number" ? defs.bitOrder : (<NumberMetadata>meta).bitOrder;
+                    (<NumberMetadata>meta).bitOrder = (<NumberMetadata>meta).bitOrder || defs.bitOrder || BitOrder.BE;
                     (<NumberMetadata>meta).numberType = (<NumberMetadata>meta).numberType || defs.numberType;
                     if ((<NumberMetadata>meta).bitOrder === BitOrder.BE) {
                         switch ((<NumberMetadata>meta).numberType) {
