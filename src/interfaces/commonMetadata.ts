@@ -1,4 +1,4 @@
-import {ISerializable} from '../serializer/serializable'
+import { ISerializable } from '../serializer/serializable'
 
 /**
  * Define the common interface for all types of serialization info
@@ -7,15 +7,15 @@ export interface CommonMetadata {
     /**
      * Define the name of the property to serialize/deserialize
      */
-    name : string
+    name: string
     /**
      * Define the position in byte array of the property
      */
-    position : number
+    position: number
     /**
      * Define the length of the property in byte
      */
-    length : number
+    length: number
 
     /**
      * Defines whether a property must be ignored in serialization
@@ -25,5 +25,5 @@ export interface CommonMetadata {
     /**
      * Define the type of property
      */
-    propertyType:string
+    propertyType: string
 }

@@ -63,7 +63,7 @@ export abstract class Serializable {
             let metas = this.serializeMetadata;
             let lastMeta = metas[metas.length - 1];
             let len = this.bufferLength;
-            let buffer: Buffer = Buffer.allocUnsafe(len);
+            let buffer: Buffer = Buffer.alloc(len);
             for (let meta of metas) {
                 if (meta.ignore) continue;
                 if (meta.propertyType === PropertyType.Number) {
