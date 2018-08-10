@@ -8,7 +8,7 @@ import { TextEncoding } from '../enums/textEncoding'
 
 class DataExample extends Serializable {
     @SerializableInfo.position(0)
-    @SerializableInfo.lenght(10)
+    @SerializableInfo.length(10)
     @SerializableInfo.nestedNumberArray(NumberType.UInt8,BitOrder.BE)
     public array:Array<number>;
 }
