@@ -20,11 +20,11 @@ export declare abstract class Serializable {
     /**
      * Return a buffer that contains all data information stored in properties of the current instance of the object
      */
-    serialize(defs?: Defaults, err?: (e: Error) => void): Buffer;
+    serialize(_defs?: Defaults, err?: (e: Error) => void): Buffer;
     /**
      * Set values of properties from a buffer
      */
-    deserialize(buffer: Buffer, defs?: Defaults, err?: (e: Error) => void): Serializable;
+    deserialize(buffer: Buffer, _defs?: Defaults, err?: (e: Error) => void): Serializable;
 }
 export interface ISerializable {
     new (): Serializable;

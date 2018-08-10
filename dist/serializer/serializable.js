@@ -51,9 +51,9 @@ var Serializable = /** @class */ (function () {
     /**
      * Return a buffer that contains all data information stored in properties of the current instance of the object
      */
-    Serializable.prototype.serialize = function (defs, err) {
+    Serializable.prototype.serialize = function (_defs, err) {
         try {
-            defs = Object.assign(Serializable.DefautSettings, defs || {});
+            var defs = Object.assign(Serializable.DefautSettings, _defs || {});
             var metas = this.serializeMetadata;
             var lastMeta = metas[metas.length - 1];
             var len = this.bufferLength;
@@ -243,8 +243,8 @@ var Serializable = /** @class */ (function () {
     /**
      * Set values of properties from a buffer
      */
-    Serializable.prototype.deserialize = function (buffer, defs, err) {
-        defs = Object.assign(Serializable.DefautSettings, defs || {});
+    Serializable.prototype.deserialize = function (buffer, _defs, err) {
+        var defs = Object.assign(Serializable.DefautSettings, _defs || {});
         var metas = this.serializeMetadata;
         var len = buffer.length;
         var lastWrite = 0;
