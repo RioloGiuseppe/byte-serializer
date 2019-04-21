@@ -147,7 +147,7 @@ export abstract class Serializable {
                         let stPos = meta.position;
                         let _len = (<NestedMetadata>meta).nestedSize;
                         for (let item of a) {
-                            f.apply(buffer, [item, _len]);
+                            f.apply(buffer, [item, stPos]);
                             stPos += _len;
                         }
                     }
