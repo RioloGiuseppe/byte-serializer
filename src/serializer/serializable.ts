@@ -28,7 +28,7 @@ export abstract class Serializable {
             return this._serializeMetadata;
         let _meta = Object.getPrototypeOf(this)._metaSerialize;
 
-        this._serializeMetadata = _meta !== null && _meta !== undefined ? Object.keys(_meta) : []
+        this._serializeMetadata = (_meta !== null && _meta !== undefined ? Object.keys(_meta) : [])
             .map(o => Object.assign({
                 name: o
             }, _meta[o]))
