@@ -6,10 +6,10 @@ export enum BitOrder {
     /**
      * Use little-endian byte sorting
      */
-    LE,
+    LE = 1,
     
     /**
      *  Use big-endian byte sorting
      */
-    BE
+    BE = 2
 }
